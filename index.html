@@ -20,13 +20,18 @@
     <!-- Header -->
     <header class="app-header">
         <div class="header-top">
+            <button id="back-btn" class="icon-btn back-btn" onclick="navigateTo('home')" style="display: none;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
             <div class="logo">
                 <i class="fas fa-mosque"></i>
-                <span>Islamic<span>Companion</span></span>
+                <span data-i18n="app-name">Islamic<span>Companion</span></span>
             </div>
         </div>
+
         <div class="header-info">
-            <div class="greeting" id="user-greeting">Assalamu Alaikum</div>
+            <div class="greeting" id="user-greeting" data-i18n="greeting">Assalamu Alaikum</div>
+
             <div class="date-container">
                 <span id="gregorian-date">...</span> • <span id="hijri-date">...</span>
             </div>
@@ -38,14 +43,17 @@
         <section id="home" class="page active">
             <div class="hero-banner">
                 <div class="next-prayer-card">
-                    <span class="label">Next Prayer</span>
-                    <h2 id="next-prayer-name">Loading...</h2>
+                    <span class="label" data-i18n="next-prayer">Next Prayer</span>
+
+                    <h2 id="next-prayer-name" data-i18n="loading">Loading...</h2>
+
                     <div id="prayer-countdown">00:00:00</div>
                 </div>
             </div>
 
             <div class="card quran-verse-card">
-                <div class="card-header"><i class="fas fa-book-open"></i> Verse of the Day</div>
+                <div class="card-header"><i class="fas fa-book-open"></i> <span data-i18n="verse-day">Verse of the Day</span></div>
+
                 <p id="quran-arabic" class="arabic-text">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
                 <p id="quran-translation" class="translation">In the name of Allah, the Entirely Merciful, the
                     Especially Merciful.</p>
@@ -55,63 +63,95 @@
             <div class="quick-actions">
                 <button onclick="navigateTo('azkar')" class="action-btn">
                     <i class="fas fa-hands-praying"></i>
-                    <span>Azkar</span>
+                    <span data-i18n="azkar">Azkar</span>
                 </button>
                 <button onclick="navigateTo('tasbeeh')" class="action-btn">
-                    <i class="fas fa-beads"></i>
-                    <span>Tasbeeh</span>
+                    <div class="action-icon-wrapper">
+                        <i class="fas fa-beads"></i>
+                    </div>
+                    <span data-i18n="tasbeeh">Tasbeeh</span>
                 </button>
+                <button onclick="navigateTo('prayer')" class="action-btn prayer-action-btn">
+                    <i class="fas fa-person-praying"></i>
+                    <span data-i18n="prayer">Prayer</span>
+                </button>
+
             </div>
+
+
+
+
         </section>
 
         <!-- Azkar Section -->
         <section id="azkar" class="page">
-            <h2 class="section-title">Daily Azkar</h2>
+            <h2 class="section-title" data-i18n="daily-azkar">Daily Azkar</h2>
+
             <div class="azkar-categories">
-                <button class="cat-chip active" onclick="filterAzkar('morning')">Morning</button>
-                <button class="cat-chip" onclick="filterAzkar('evening')">Evening</button>
-                <button class="cat-chip" onclick="filterAzkar('after-prayer')">After Salah</button>
+                <button class="cat-chip active" onclick="filterAzkar('morning')" data-i18n="morning">Morning</button>
+                <button class="cat-chip" onclick="filterAzkar('evening')" data-i18n="evening">Evening</button>
+                <button class="cat-chip" onclick="filterAzkar('after-prayer')" data-i18n="after-salah">After Salah</button>
+
             </div>
             <div id="azkar-container" class="list-container">
                 <!-- Rendered by JS -->
             </div>
         </section>
 
-        <!-- Prayer Times Section -->
+        <!-- Prayer Section (Separate Page) -->
         <section id="prayer" class="page">
-            <h2 class="section-title">Prayer Times</h2>
-            <div class="location-box">
-                <i class="fas fa-location-dot"></i>
-                <span id="location-name">Detecting location...</span>
+            <div class="prayer-header-actions">
+                <h2 class="section-title" data-i18n="namaz-guide">Namaz Guide</h2>
+                <button id="toggle-prayer-times-btn" class="icon-btn toggle-times-btn" onclick="togglePrayerTimes()">
+                    <i class="fas fa-clock"></i>
+                </button>
             </div>
-            <div class="prayer-list" id="prayer-times-list">
-                <!-- Template for Prayer Card -->
-                <div class="prayer-card" data-prayer="Fajr">
-                    <span>Fajr</span>
-                    <span class="time">--:--</span>
+
+            <div id="prayer-times-container" class="prayer-times-collapsible" style="display: none;">
+                <div class="location-box">
+                    <i class="fas fa-location-dot"></i>
+                    <span id="location-name" data-i18n="detecting">Detecting location...</span>
                 </div>
-                <div class="prayer-card" data-prayer="Dhuhr">
-                    <span>Dhuhr</span>
-                    <span class="time">--:--</span>
+                <div class="prayer-list" id="prayer-times-list">
+                    <div class="prayer-card" data-prayer="Fajr">
+                        <span>Fajr</span>
+                        <span class="time">--:--</span>
+                    </div>
+                    <div class="prayer-card" data-prayer="Dhuhr">
+                        <span>Dhuhr</span>
+                        <span class="time">--:--</span>
+                    </div>
+                    <div class="prayer-card" data-prayer="Asr">
+                        <span>Asr</span>
+                        <span class="time">--:--</span>
+                    </div>
+                    <div class="prayer-card" data-prayer="Maghrib">
+                        <span>Maghrib</span>
+                        <span class="time">--:--</span>
+                    </div>
+                    <div class="prayer-card" data-prayer="Isha">
+                        <span>Isha</span>
+                        <span class="time">--:--</span>
+                    </div>
                 </div>
-                <div class="prayer-card" data-prayer="Asr">
-                    <span>Asr</span>
-                    <span class="time">--:--</span>
-                </div>
-                <div class="prayer-card" data-prayer="Maghrib">
-                    <span>Maghrib</span>
-                    <span class="time">--:--</span>
-                </div>
-                <div class="prayer-card" data-prayer="Isha">
-                    <span>Isha</span>
-                    <span class="time">--:--</span>
-                </div>
+            </div>
+
+            <div id="namaz-guide-container" class="list-container">
+                <!-- Rendered by JS -->
             </div>
         </section>
+
+
+
+
 
         <!-- Tasbeeh Section -->
         <section id="tasbeeh" class="page">
             <div class="tasbeeh-container">
+                <div class="tasbeeh-header-icon">
+                    <i class="fas fa-beads"></i>
+                </div>
+
                 <select id="tasbeeh-select" class="tasbeeh-dropdown">
                     <option value="SubhanAllah">SubhanAllah</option>
                     <option value="Alhamdulillah">Alhamdulillah</option>
@@ -134,12 +174,14 @@
 
         <!-- Settings Section -->
         <section id="settings" class="page">
-            <h2 class="section-title">Settings</h2>
+            <h2 class="section-title" data-i18n="settings">Settings</h2>
+
             <div class="settings-list">
                 <div class="setting-item">
                     <div class="setting-info">
-                        <span class="setting-label">Dark Mode</span>
-                        <span class="setting-desc">Switch between light and dark themes</span>
+                        <span class="setting-label" data-i18n="dark-mode">Dark Mode</span>
+                        <span class="setting-desc" data-i18n="dark-mode-desc">Switch between light and dark themes</span>
+
                     </div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="dark-mode-toggle-settings">
@@ -148,15 +190,27 @@
                 </div>
                 <div class="setting-item">
                     <div class="setting-info">
-                        <span class="setting-label">Font Size</span>
+                        <span class="setting-label" data-i18n="font-size">Font Size</span>
+
                     </div>
                     <select id="font-size-adjust" class="mini-select">
-                        <option value="small">Small</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="large">Large</option>
+                        <option value="small" data-i18n="small">Small</option>
+                        <option value="medium" selected data-i18n="medium">Medium</option>
+                        <option value="large" data-i18n="large">Large</option>
                     </select>
                 </div>
-                <button class="danger-btn" id="reset-app-btn">Reset All Progress</button>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label" data-i18n="language">Language</span>
+                    </div>
+                    <select id="language-select" class="mini-select">
+                        <option value="en" selected>English</option>
+                        <option value="ur">اردو (Urdu)</option>
+                    </select>
+                </div>
+
+                <button class="danger-btn" id="reset-app-btn" data-i18n="reset-progress">Reset All Progress</button>
+
             </div>
         </section>
     </main>
@@ -165,23 +219,21 @@
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="navigateTo('home')" data-target="home">
             <i class="fas fa-home"></i>
-            <span>Home</span>
-        </button>
-        <button class="nav-item" onclick="navigateTo('azkar')" data-target="azkar">
-            <i class="fas fa-book-open-reader"></i>
-            <span>Azkar</span>
+            <span data-i18n="home">Home</span>
+
         </button>
         <button class="nav-item" onclick="navigateTo('prayer')" data-target="prayer">
-            <i class="fas fa-clock"></i>
-            <span>Prayer</span>
+            <i class="fas fa-person-praying"></i>
+            <span data-i18n="prayer">Prayer</span>
         </button>
-        <button class="nav-item" onclick="navigateTo('tasbeeh')" data-target="tasbeeh">
-            <i class="fas fa-circle-dot"></i>
-            <span>Tasbeeh</span>
-        </button>
+
+
+
+
         <button class="nav-item" onclick="navigateTo('settings')" data-target="settings">
             <i class="fas fa-gear"></i>
-            <span>Settings</span>
+            <span data-i18n="settings">Settings</span>
+
         </button>
     </nav>
 

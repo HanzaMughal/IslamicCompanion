@@ -34,8 +34,13 @@ body {
     color: var(--text-main);
     line-height: 1.6;
     overflow-x: hidden;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, font-size 0.2s ease;
 }
+
+body.font-small { font-size: 14px; }
+body.font-medium { font-size: 16px; }
+body.font-large { font-size: 20px; }
+
 
 .arabic-text {
     font-family: 'Amiri', serif;
@@ -83,7 +88,16 @@ body {
     border-radius: 50%;
     cursor: pointer;
     backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
 }
+
+.back-btn {
+    margin-right: 0.5rem;
+}
+
 
 .header-info .greeting {
     font-size: 1.4rem;
@@ -168,8 +182,21 @@ main {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
+
+.prayer-action-btn {
+    grid-column: span 2;
+    flex-direction: row !important;
+    padding: 1rem 2rem !important;
+    gap: 1rem !important;
+}
+
+.home-sub-section {
+    margin-top: 2rem;
+    animation: fadeIn 0.4s ease-out;
+}
+
 
 .action-btn {
     background: var(--card-bg);
@@ -221,8 +248,16 @@ main {
 /* Tasbeeh */
 .tasbeeh-container {
     text-align: center;
-    padding-top: 2rem;
+    padding-top: 1rem;
 }
+
+.tasbeeh-header-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
 
 .counter-display {
     width: 220px;
@@ -360,8 +395,9 @@ main {
     margin-top: 0.8rem;
     font-size: 0.8rem;
     font-weight: 600;
-    text-align: right;
+    text-align: end;
 }
+
 
 /* Azkar Card Styles */
 .zikr-card {
@@ -376,9 +412,10 @@ main {
 }
 
 .zikr-card.completed {
-    border-left: 5px solid #10b981;
+    border-inline-start: 5px solid #10b981;
     opacity: 0.8;
 }
+
 
 .zikr-main-content {
     cursor: pointer;
@@ -407,10 +444,19 @@ main {
 .urdu-text {
     color: var(--primary);
     font-family: 'Amiri', serif;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     direction: rtl;
     margin-bottom: 0.5rem;
 }
+
+[lang="ur"] body {
+    font-family: 'Amiri', 'Poppins', sans-serif;
+}
+
+[lang="ur"] .arabic-text {
+    font-size: 1.8rem;
+}
+
 
 .english-text {
     font-size: 0.85rem;
@@ -504,6 +550,197 @@ main {
     background: #334155;
     color: #94a3b8;
 }
+
+/* Prayer & Namaz Guide Styles */
+.prayer-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+
+.prayer-header-actions .section-title {
+    margin-bottom: 0;
+}
+
+.toggle-times-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.prayer-times-collapsible {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed var(--text-muted);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.guide-module {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .guide-module {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.guide-header {
+    padding: 1.2rem 1.5rem;
+    background: rgba(15, 118, 110, 0.05);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.guide-header i {
+    transition: transform 0.3s ease;
+}
+
+.guide-module.expanded .guide-header i {
+    transform: rotate(180deg);
+}
+
+.guide-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+    background: var(--card-bg);
+}
+
+.guide-module.expanded .guide-content {
+    max-height: 2500px; /* Large enough to hold content */
+}
+
+.guide-section {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.guide-section:last-child {
+    border-bottom: none;
+}
+
+.guide-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.guide-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 1rem;
+    background: var(--accent);
+    border-radius: 4px;
+}
+
+.guide-step {
+    display: flex;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.guide-step-number {
+    width: 30px;
+    height: 30px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+}
+
+.guide-step-content {
+    flex-grow: 1;
+}
+
+.guide-step-title {
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.2rem;
+}
+
+.guide-step-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.guide-arabic-block {
+    margin-top: 0.8rem;
+    padding: 1rem;
+    background: rgba(15, 118, 110, 0.05);
+    border-radius: 0.8rem;
+    border-right: 3px solid var(--primary);
+    direction: rtl;
+    text-align: right;
+}
+
+.guide-arabic-text {
+    font-family: 'Amiri', serif;
+    font-size: 1.4rem;
+    color: var(--primary-dark);
+    line-height: 2.2rem;
+}
+
+[data-theme="dark"] .guide-arabic-text {
+    color: var(--accent);
+}
+
+.guide-urdu-text {
+    font-family: 'Amiri', 'Poppins', sans-serif;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
+
+.guide-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.guide-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+}
+
+.guide-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+}
+
+[lang="ur"] .guide-list li {
+    padding-left: 0;
+    padding-right: 1.5rem;
+}
+
+[lang="ur"] .guide-list li::before {
+    left: auto;
+    right: 0;
+}
+
 
 /* Responsive Adjustments */
 @media (min-width: 768px) {
