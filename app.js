@@ -421,7 +421,57 @@ const NAMAZ_GUIDE_DATA = {
   ]
 };
 
-// State
+// ====================================================
+// HAJJ & UMRAH DATA
+// ====================================================
+const HAJJ_UMRAH_DATA = {
+  umrah: {
+    title: "عمرہ کا مکمل طریقہ",
+    description: "عمرہ ایک ایسی عبادت ہے جو پورے سال میں کسی بھی وقت ادا کی جا سکتی ہے۔ اسے 'حجِ اصغر' بھی کہا جاتا ہے۔",
+    steps: [
+      { step:1, title:"احرام اور نیت", actions:["میقات پر پہنچ کر غسل کریں","جسم پر خوشبو لگائیں (مردوں کے لیے)","احرام کی چادریں پہنیں"], niyyat:"لَبَّيْكَ عُمْرَةً", niyyat_translation:"میں عمرہ کے لیے حاضر ہوں", note:"ہوائی جہاز سے جانے والے میقات آنے سے قبل احرام پہن سکتے ہیں لیکن نیت میقات پر ہی کریں۔" },
+      { step:2, title:"تلبیہ پکارنا", actions:["احرام کے بعد بلند آواز سے تلبیہ پکاریں"], dua:{ arabic:"لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ", urdu:"میں حاضر ہوں اے اللہ میں حاضر ہوں، میں حاضر ہوں تیرا کوئی شریک نہیں میں حاضر ہوں، بے شک حمد اور نعمت تیرے لیے ہے اور بادشاہت بھی، تیرا کوئی شریک نہیں۔" }, note:"طواف شروع کرنے سے پہلے تلبیہ بند کر دیں۔" },
+      { step:3, title:"طواف (بیت اللہ کے 7 چکر)", actions:["حجرِ اسود سے آغاز کریں","ہر چکر کے آغاز پر 'بِسْمِ اللهِ، اللهُ أَكْبَرُ' کہیں"], men_specific:{ ramal:"پہلے تین چکروں میں تیز چلنا سنت ہے", idtiba:"دایاں کندھا ننگا رکھنا سنت ہے" }, dua_between_ruknayn:{ arabic:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ", urdu:"اے ہمارے رب ہمیں دنیا میں بھی بھلائی دے اور آخرت میں بھی بھلائی دے اور ہمیں آگ کے عذاب سے بچا۔", location:"رکن یمانی اور حجر اسود کے درمیان" } },
+      { step:4, title:"مقامِ ابراہیم اور زمزم", actions:["طواف کے بعد مقامِ ابراہیم کے پیچھے یا کہیں بھی 2 رکعت نماز ادا کریں","خوب پیٹ بھر کر زمزم پئیں","کچھ زمزم سر پر ڈالیں"] },
+      { step:5, title:"سعی (صفا و مروہ)", total_rounds:7, start:"صفا", end:"مروہ", note:"صفا سے مروہ 1 چکر شمار ہوتا ہے", men_specific:"سبز ستونوں کے درمیان مرد تیز دوڑیں" },
+      { step:6, title:"حلق یا تقصیر (بال کٹوانا)", men:"سر منڈوائیں یا پورے سر کے بال کٹوائیں", women:"صرف ایک پور کے برابر بال کاٹیں", result:"اس کے ساتھ ہی احرام کھل جاتا ہے" }
+    ]
+  },
+  hajj_types: {
+    title: "حج کی اقسام",
+    types: [
+      { id:"tamatu", name:"حج تمتع", status:"سب سے افضل", description:"پہلے عمرہ کر کے احرام کھول دیا جاتا ہے، پھر 8 ذی الحجہ کو دوبارہ حج کا احرام باندھا جاتا ہے۔", qurbani:true },
+      { id:"ifrad", name:"حج افراد", description:"صرف حج کی نیت کی جاتی ہے، اس میں عمرہ شامل نہیں ہوتا۔", qurbani:false },
+      { id:"qiran", name:"حج قران", description:"حج اور عمرہ کا احرام ایک ساتھ باندھا جاتا ہے اور قربانی تک احرام نہیں کھولا جاتا۔", qurbani:true, note:"قربانی کا جانور ساتھ لانا مسنون ہے" }
+    ]
+  },
+  duas: [
+    { id:"talbiyah", name:"تلبیہ", arabic:"لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ", urdu:"میں حاضر ہوں اے اللہ میں حاضر ہوں، میں حاضر ہوں تیرا کوئی شریک نہیں میں حاضر ہوں، بے شک حمد اور نعمت تیرے لیے ہے اور بادشاہت بھی تیری ہی ہے، تیرا کوئی شریک نہیں۔", when:"احرام کے بعد، مسلسل" },
+    { id:"tawaf_start", name:"طواف آغاز", arabic:"بِسْمِ اللهِ اللهُ أَكْبَرُ", urdu:"اللہ کے نام سے، اللہ سب سے بڑا ہے", when:"حجر اسود کے سامنے" },
+    { id:"safa_dua", name:"صفا کی دعا", arabic:"لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", urdu:"اللہ کے سوا کوئی معبود نہیں وہ اکیلا ہے، اس کا کوئی شریک نہیں، بادشاہت اسی کی ہے اور تعریف بھی اسی کے لیے ہے اور وہ ہر چیز پر قادر ہے۔", when:"صفا اور مروہ پہاڑی پر" },
+    { id:"arafat_dua", name:"میدانِ عرفات کی دعا", arabic:"لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", urdu:"اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس کا کوئی شریک نہیں، بادشاہت اسی کی ہے اور تعریف بھی اسی کے لیے ہے اور وہ ہر چیز پر قادر ہے۔ یہ یوم عرفہ کی سب سے افضل دعا ہے۔", when:"یومِ عرفہ (بہترین دعا)" },
+    { id:"muzdalifa_dua", name:"مزدلفہ کی دعا", arabic:"سُبْحَانَ اللهِ، اَلْحَمْدُ لِلهِ، اللهُ أَكْبَرُ، لَا إِلَهَ إِلَّا اللهُ", urdu:"اللہ پاک ہے، سب تعریف اللہ کے لیے ہے، اللہ سب سے بڑا ہے، اللہ کے سوا کوئی معبود نہیں", when:"مشعر الحرام کے پاس" }
+  ],
+  important_places: [
+    { id:"miqat", name:"میقات", description:"وہ مقامات جہاں سے احرام باندھنا ضروری ہے", examples:["ذوالحلیفہ","یلملم","قرن المنازل","ذات عرق","الجُحفہ"] },
+    { id:"mina", name:"منیٰ", description:"8 ذی الحجہ کو قیام اور ایام تشریق میں رمی کے لیے قیام گاہ" },
+    { id:"arafat", name:"عرفات", description:"9 ذی الحجہ کا وقوف، جو حج کا سب سے بڑا رکن ہے" },
+    { id:"muzdalifa", name:"مزدلفہ", description:"9 ذی الحجہ کی رات قیام اور فجر تک وقوف کی جگہ" },
+    { id:"jamarat", name:"جمرات", description:"شیطان کو کنکریاں مارنے کے تین ستون" }
+  ],
+  rukn_wajibat_sunan: {
+    arkan: { title:"ارکان (جن کے بغیر حج نہیں ہوتا)", items:["احرام","وقوفِ عرفہ","طواف زیارت","سعی"] },
+    wajibat: { title:"واجبات (ترک پر قربانی لازم ہے)", items:["میقات سے احرام","عرفات میں مغرب تک قیام","مزدلفہ میں رات گزارنا","منیٰ کی راتیں","رمی جمار","بال کٹوانا","طوافِ وداع"] },
+    sunan: { title:"سنتیں", items:["غسل کرنا","خوشبو لگانا","تلبیہ پکارنا","رمل کرنا"] }
+  },
+  common_mistakes: [
+    { id:"dam_when", topic:"دم (قربانی) کب لازم ہوتی ہے؟", answer:"کسی واجب کے ترک ہونے پر دم لازم ہو جاتی ہے۔" },
+    { id:"ihram_restrictions", topic:"احرام کی پابندیاں", men:["سلا ہوا کپڑا منع ہے","ٹوپی منع ہے","خوشبو منع ہے"], women:["نقاب منع ہے","دستانے منع ہیں"] },
+    { id:"women_issues", topic:"خواتین کے مسائل", rules:["حائضہ خاتون طواف کے علاوہ تمام مناسک ادا کر سکتی ہے","طوافِ وداع حائضہ پر معاف ہے"] },
+    { id:"jamarat_mistake", topic:"جمرات کی عام غلطی", correct:"جمرات کو شیطان سمجھ کر جوتے یا بڑے پتھر مارنا غلط ہے۔ یہ صرف اللہ کے ذکر کی ایک عبادت ہے۔" },
+    { id:"tawaf_mistake", topic:"طواف کی غلطی", correct:"حجر اسود کے بوسے کے لیے دوسروں کو دھکے دینا یا اذیت پہنچانا جائز نہیں۔" }
+  ]
+};
 
 let activeCategory = localStorage.getItem('last_azkar_cat') || 'morning_azkar';
 let currentLanguage = localStorage.getItem('language') || 'en';
@@ -454,7 +504,8 @@ const TRANSLATIONS = {
         "home": "Home",
         "prayer": "Prayer",
         "tap": "TAP",
-        "namaz-guide": "Namaz Guide"
+        "namaz-guide": "Namaz Guide",
+        "hajj-umrah": "Hajj & Umrah"
     },
 
     ur: {
@@ -483,7 +534,8 @@ const TRANSLATIONS = {
         "home": "ہوم",
         "prayer": "نماز",
         "tap": "ٹیپ کریں",
-        "namaz-guide": "نماز کا طریقہ"
+        "namaz-guide": "نماز کا طریقہ",
+        "hajj-umrah": "حج و عمرہ"
     }
 };
 
@@ -509,6 +561,7 @@ function renderAzkar(catId) {
         <div class="zikr-card ${isCompleted ? 'completed' : ''}" id="card-${catId}-${item.id}">
             <div class="zikr-main-content" onclick="toggleExpand(this)">
                 <p class="arabic-text">${item.arabic}</p>
+                <p class="expand-hint"><i class="fas fa-chevron-down" style="font-size:0.65rem;"></i> ترجمہ دیکھنے کے لیے ٹیپ کریں</p>
                 <div class="expandable-content">
                     <p class="urdu-text">${item.urdu}</p>
                     <p class="english-text">${item.english}</p>
@@ -640,17 +693,18 @@ function navigateTo(pageId) {
         renderAzkar(activeCategory);
     }
 
+    // Render Hajj & Umrah section
+    if (pageId === 'hajj-umrah') {
+        renderHajjUmrahSection();
+    }
+
     // Scroll to top when changing pages
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function togglePrayerTimes() {
     const container = document.getElementById('prayer-times-container');
-    if (container.style.display === 'none' || container.style.display === '') {
-        container.style.display = 'block';
-    } else {
-        container.style.display = 'none';
-    }
+    container.classList.toggle('expanded');
 }
 
 // --- Namaz Guide Logic ---
@@ -833,7 +887,463 @@ function renderList(arr) {
     return html;
 }
 
-// --- Theme Toggle Logic ---
+// =====================================================
+// HAJJ & UMRAH RENDERING
+// =====================================================
+
+function renderHajjUmrahSection() {
+    renderUmrahGuide();
+    renderHajjTypes();
+}
+
+// ---- Tab switcher ----
+function showHajjUmrahTab(tab) {
+    document.querySelectorAll('.hu-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.hu-subnav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`hu-tab-${tab}`).classList.add('active');
+    document.getElementById(`btn-${tab}`).classList.add('active');
+}
+
+// ---- Helper: collapsible card ----
+function huCard(icon, title, bodyHtml, startExpanded = false) {
+    const expanded = startExpanded ? 'expanded' : '';
+    return `
+    <div class="hu-info-card ${expanded}">
+        <div class="hu-info-header" onclick="this.parentElement.classList.toggle('expanded')">
+            <div class="hu-info-header-left">
+                <div class="hu-info-header-icon"><i class="fas ${icon}"></i></div>
+                <span class="hu-info-title">${title}</span>
+            </div>
+            <i class="fas fa-chevron-down hu-info-chevron"></i>
+        </div>
+        <div class="hu-info-body"><div class="hu-info-inner">${bodyHtml}</div></div>
+    </div>`;
+}
+
+// ---- Helper: Arabic block ----
+function huArabicBlock(arabic, urdu, label = '') {
+    return `
+    <div class="hu-arabic-block">
+        ${label ? `<div class="hu-section-label" style="direction:rtl;text-align:right;">${label}</div>` : ''}
+        <div class="hu-arabic-text">${arabic}</div>
+        ${urdu ? `<div class="hu-arabic-translation">${urdu}</div>` : ''}
+    </div>`;
+}
+
+// ---- Helper: list ----
+function huList(items) {
+    return `<ul class="hu-list">${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
+}
+
+// ============ UMRAH ============
+function renderUmrahGuide() {
+    const container = document.getElementById('umrah-container');
+    if (!container) return;
+    const d = HAJJ_UMRAH_DATA.umrah;
+    let html = '';
+
+    // Description banner
+    html += `<div class="hu-info-card" style="margin-bottom:1.2rem;">
+        <div class="hu-info-inner" style="direction:rtl;text-align:right;">
+            <div class="hu-section-heading"><span class="hu-section-heading-text">عمرہ کا مکمل طریقہ</span></div>
+            <p style="font-family:'Amiri',serif;color:var(--text-muted);font-size:0.95rem;line-height:1.7;">${d.description}</p>
+        </div>
+    </div>`;
+
+    // Map Button
+    html += `<button class="jm-open-btn" onclick="openJourneyMap('umrah')">
+        <i class="fas fa-map-location-dot"></i>
+        عمرہ کا تصویری نقشہ دیکھیں
+    </button>`;
+
+    // Steps
+    let stepsHtml = '';
+    d.steps.forEach((s, i) => {
+        let stepBody = `<div class="hu-step-title">${s.title}</div>`;
+        // Actions list
+        if (s.actions) {
+            stepBody += `<ul class="hu-list" style="margin-top:0.4rem;">${s.actions.map(a => `<li>${a}</li>`).join('')}</ul>`;
+        }
+        // Niyyat
+        if (s.niyyat) {
+            stepBody += huArabicBlock(s.niyyat, s.niyyat_translation, 'نیت');
+        }
+        // Main dua
+        if (s.dua) {
+            stepBody += huArabicBlock(s.dua.arabic, s.dua.urdu, 'تلبیہ');
+        }
+        // Dua between ruknayn
+        if (s.dua_between_ruknayn) {
+            stepBody += `<hr class="hu-divider">`;
+            stepBody += `<p class="hu-step-desc" style="margin-bottom:0.4rem;">📍 ${s.dua_between_ruknayn.location}</p>`;
+            stepBody += huArabicBlock(s.dua_between_ruknayn.arabic, s.dua_between_ruknayn.urdu);
+        }
+        // Men specific
+        if (s.men_specific && typeof s.men_specific === 'object') {
+            stepBody += `<hr class="hu-divider">`;
+            stepBody += `<div class="hu-section-label">مردوں کے لیے خاص</div>`;
+            stepBody += `<p class="hu-step-desc">🔹 ${s.men_specific.ramal}</p>`;
+            stepBody += `<p class="hu-step-desc">🔹 ${s.men_specific.idtiba}</p>`;
+        } else if (s.men_specific && typeof s.men_specific === 'string') {
+            stepBody += `<p class="hu-step-desc" style="margin-top:0.4rem;">👨 ${s.men_specific}</p>`;
+        }
+        // Gender split (halq/taqsir)
+        if (s.men && s.women) {
+            stepBody += `<div class="hu-gender-row">
+                <div class="hu-gender-box"><span class="hu-gender-label">👨 مرد</span><p class="hu-step-desc">${s.men}</p></div>
+                <div class="hu-gender-box"><span class="hu-gender-label">👩 خواتین</span><p class="hu-step-desc">${s.women}</p></div>
+            </div>`;
+        }
+        if (s.result) {
+            stepBody += `<p class="hu-step-desc" style="margin-top:0.5rem;color:var(--primary);font-weight:600;">✅ ${s.result}</p>`;
+        }
+        // Sai details
+        if (s.total_rounds) {
+            stepBody += `<p class="hu-step-desc" style="margin-top:0.4rem;">🔄 کل چکر: ${s.total_rounds} (${s.start} سے ${s.end})</p>`;
+        }
+        if (s.note) stepBody += `<div class="hu-note">💡 ${s.note}</div>`;
+
+        stepsHtml += `<div class="hu-step"><div class="hu-step-num">${s.step}</div><div class="hu-step-body">${stepBody}</div></div>`;
+        if (i < d.steps.length - 1) stepsHtml += `<hr class="hu-divider">`;
+    });
+    html += huCard('fa-list-ol', 'عمرہ کے ارکان — مرحلہ وار طریقہ', stepsHtml, true);
+
+    // Umrah Duas
+    html += renderHajjUmrahDuasCard();
+
+    container.innerHTML = html;
+}
+
+// ============ HAJJ TYPES ============
+function renderHajjTypes() {
+    const container = document.getElementById('hajj-type-container');
+    if (!container) return;
+    const types = HAJJ_UMRAH_DATA.hajj_types.types;
+    const icons = { tamatu: 'fa-star', ifrad: 'fa-circle', qiran: 'fa-link' };
+
+    container.innerHTML = `<div class="hajj-type-grid">${types.map(t => `
+        <div class="hajj-type-card" onclick="selectHajjType('${t.id}')">
+            <div class="hajj-type-icon"><i class="fas ${icons[t.id] || 'fa-moon'}"></i></div>
+            <div class="hajj-type-info">
+                <div class="hajj-type-name">
+                    ${t.name}
+                    ${t.status ? `<span class="badge-afzal">${t.status}</span>` : ''}
+                    ${t.qurbani ? '<span class="badge-afzal" style="background:rgba(15,118,110,0.15);color:var(--primary);">قربانی</span>' : ''}
+                </div>
+                <p class="hajj-type-desc">${t.description}</p>
+                ${t.note ? `<div class="hu-note" style="margin-top:0.4rem;">💡 ${t.note}</div>` : ''}
+            </div>
+        </div>`).join('')}</div>`;
+
+    // Hide content until type selected
+    document.getElementById('hajj-content-container').innerHTML = '';
+}
+
+function selectHajjType(typeId) {
+    // Mark selected card
+    document.querySelectorAll('.hajj-type-card').forEach(c => c.classList.remove('selected'));
+    const clickedCard = document.querySelector(`.hajj-type-card[onclick*="'${typeId}'"]`);
+    if (clickedCard) clickedCard.classList.add('selected');
+
+    renderHajjContent(typeId);
+    // Scroll to content
+    const contentEl = document.getElementById('hajj-content-container');
+    setTimeout(() => contentEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+}
+
+function renderHajjContent(typeId) {
+    const container = document.getElementById('hajj-content-container');
+    const type = HAJJ_UMRAH_DATA.hajj_types.types.find(t => t.id === typeId);
+    if (!type || !container) return;
+
+    let html = '';
+
+    // Header
+    html += `<div class="hu-info-card" style="margin-bottom:1.2rem;">
+        <div class="hu-info-inner" style="direction:rtl;text-align:right;">
+            <div class="hu-section-heading"><span class="hu-section-heading-text">${type.name}</span></div>
+            <p style="font-family:'Amiri',serif;color:var(--text-muted);font-size:0.95rem;line-height:1.7;">${type.description}</p>
+            ${type.note ? `<div class="hu-note" style="margin-top:0.6rem;">💡 ${type.note}</div>` : ''}
+            <p style="margin-top:0.6rem;font-size:0.85rem;color:var(--primary);font-weight:600;">قربانی: ${type.qurbani ? '✅ لازم ہے' : '❌ لازم نہیں'}</p>
+        </div>
+    </div>`;
+
+    // Map Button
+    html += `<button class="jm-open-btn" onclick="openJourneyMap('hajj')">
+        <i class="fas fa-map-location-dot"></i>
+        حج کا تصویری نقشہ دیکھیں
+    </button>`;
+
+    // Arkan
+    const rws = HAJJ_UMRAH_DATA.rukn_wajibat_sunan;
+    html += huCard('fa-pillar', rws.arkan.title, huList(rws.arkan.items));
+    html += huCard('fa-exclamation-circle', rws.wajibat.title, huList(rws.wajibat.items));
+    html += huCard('fa-sun', rws.sunan.title, huList(rws.sunan.items));
+
+    // Important places
+    const places = HAJJ_UMRAH_DATA.important_places;
+    let placesHtml = '';
+    places.forEach(p => {
+        placesHtml += `<div class="hu-step" style="margin-bottom:0.8rem;">
+            <div class="hu-step-body">
+                <div class="hu-step-title">${p.name}</div>
+                <p class="hu-step-desc">${p.description}</p>
+                ${p.examples ? `<div style="margin-top:0.4rem;">${huList(p.examples)}</div>` : ''}
+            </div>
+        </div><hr class="hu-divider">`;
+    });
+    html += huCard('fa-map-marker-alt', 'اہم مقامات', placesHtml);
+
+    // Duas
+    html += renderHajjUmrahDuasCard();
+
+    // Common mistakes / masail
+    let mistakesHtml = '';
+    HAJJ_UMRAH_DATA.common_mistakes.forEach((m, i) => {
+        mistakesHtml += `<div style="direction:rtl;text-align:right;margin-bottom:0.9rem;">
+            <div class="hu-step-title" style="color:var(--text-main);">${m.topic}</div>`;
+        if (m.answer) mistakesHtml += `<p class="hu-step-desc">${m.answer}</p>`;
+        if (m.correct) mistakesHtml += `<p class="hu-step-desc">✅ ${m.correct}</p>`;
+        if (m.men) mistakesHtml += `<div class="hu-gender-row" style="margin-top:0.4rem;">
+            <div class="hu-gender-box"><span class="hu-gender-label">👨 مرد</span>${huList(m.men)}</div>
+            <div class="hu-gender-box"><span class="hu-gender-label">👩 خواتین</span>${huList(m.women)}</div>
+        </div>`;
+        if (m.rules) mistakesHtml += huList(m.rules);
+        if (i < HAJJ_UMRAH_DATA.common_mistakes.length - 1) mistakesHtml += `<hr class="hu-divider">`;
+        mistakesHtml += `</div>`;
+    });
+    html += huCard('fa-triangle-exclamation', 'احرام کی پابندیاں اور اہم مسائل', mistakesHtml);
+
+    container.innerHTML = html;
+}
+
+// ---- Shared Duas card for both Umrah & Hajj ----
+function renderHajjUmrahDuasCard() {
+    let duasHtml = '';
+    HAJJ_UMRAH_DATA.duas.forEach((d, i) => {
+        duasHtml += `<div style="margin-bottom:0.5rem;">
+            <p class="hu-step-desc" style="direction:rtl;text-align:right;font-weight:600;color:var(--text-main);margin-bottom:0.3rem;">⏰ ${d.when}</p>
+            ${huArabicBlock(d.arabic, d.urdu, d.name)}
+        </div>`;
+        if (i < HAJJ_UMRAH_DATA.duas.length - 1) duasHtml += `<hr class="hu-divider">`;
+    });
+    return huCard('fa-hands-praying', 'حج و عمرہ کی مسنون دعائیں', duasHtml);
+}
+
+// =====================================================
+// JOURNEY MAP LOGIC
+// =====================================================
+
+let currentMapMode = 'umrah';
+let selectedMiqat = 'dhulhulaifa';
+
+const MIQAT_COORDS = {
+    dhulhulaifa: { x: 50, y: 50, name: 'ذوالحلیفہ' },
+    yalamlam: { x: 250, y: 350, name: 'یلملم' },
+    qarnulmanazil: { x: 350, y: 150, name: 'قرن المنازل' },
+    dhatayrq: { x: 320, y: 80, name: 'ذات عرق' },
+    juhfa: { x: 50, y: 180, name: 'الجحفہ' },
+    makkah_resident: { x: 180, y: 220, name: 'تنعیم/جعرانہ' }
+};
+
+const KAABA_COORDS = { x: 200, y: 250 };
+const SAFA_MARWA_COORDS = { x: 230, y: 270 };
+
+const HAJJ_COORDS = {
+    mina: { x: 280, y: 240, name: 'منیٰ' },
+    arafat: { x: 380, y: 280, name: 'عرفات' },
+    muzdalifa: { x: 330, y: 260, name: 'مزدلفہ' },
+    jamarat: { x: 290, y: 230, name: 'جمرات' }
+};
+
+function openJourneyMap(mode) {
+    currentMapMode = mode;
+    document.getElementById('journey-map-modal').classList.add('active');
+    
+    // Toggle UI elements
+    document.getElementById('miqat-selector-row').style.display = (mode === 'umrah') ? 'flex' : 'none';
+    document.getElementById('hajj-map-legend').style.display = (mode === 'hajj') ? 'flex' : 'none';
+    
+    renderJourneyMap();
+}
+
+function closeJourneyMap() {
+    document.getElementById('journey-map-modal').classList.remove('active');
+}
+
+function onMiqatChange(val) {
+    selectedMiqat = val;
+    renderJourneyMap();
+}
+
+function renderJourneyMap() {
+    const canvas = document.getElementById('journey-map-canvas');
+    const legend = document.getElementById('journey-step-legend');
+    if (!canvas || !legend) return;
+
+    let svgHtml = '';
+    let legendHtml = '';
+
+    if (currentMapMode === 'umrah') {
+        const miqat = MIQAT_COORDS[selectedMiqat];
+        
+        svgHtml = `
+        <svg viewBox="0 0 400 350" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1))">
+            <!-- Decorative terrain (sketchy lines) -->
+            <path d="M 20 300 Q 100 280 180 310 Q 260 330 380 290" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="1" />
+            <path d="M 50 320 Q 150 300 250 330" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="1" />
+
+            <!-- Path from Miqat to Makkah -->
+            <path d="M ${miqat.x} ${miqat.y} Q ${miqat.x + (200-miqat.x)/2 + 30} ${miqat.y + (250-miqat.y)/2 - 30} 200 240" 
+                  fill="none" stroke="var(--primary)" stroke-width="4" stroke-linecap="round" stroke-dasharray="1, 8" />
+            
+            <!-- Tawaf movement indicator -->
+            <circle cx="200" cy="240" r="25" fill="none" stroke="var(--primary)" stroke-width="1" stroke-dasharray="4,4" opacity="0.4" />
+            
+            <!-- Path to Safa/Marwa -->
+            <path d="M 215 240 L 250 240" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-dasharray="2,4" />
+
+            <!-- Points -->
+            <!-- Miqat -->
+            <g>
+                <circle cx="${miqat.x}" cy="${miqat.y}" r="12" fill="var(--primary)" />
+                <text x="${miqat.x}" y="${miqat.y + 4}" font-family="Arial" font-size="9" text-anchor="middle" fill="white" font-weight="bold">1</text>
+                <text x="${miqat.x}" y="${miqat.y - 18}" font-family="Amiri" font-size="14" text-anchor="middle" font-weight="bold" fill="var(--primary)">${miqat.name}</text>
+            </g>
+            
+            <!-- Makkah / Kaaba -->
+            <g>
+                <rect x="185" y="225" width="30" height="30" rx="3" fill="#1e293b" />
+                <rect x="197" y="240" width="6" height="10" fill="#d4af37" opacity="0.8" /> <!-- Door -->
+                <text x="200" y="215" font-family="Amiri" font-size="14" text-anchor="middle" font-weight="bold" fill="var(--text-main)">مکہ مکرمہ (طواف)</text>
+                <circle cx="200" cy="240" r="18" fill="white" stroke="var(--primary)" stroke-width="2" opacity="0.9" />
+                <text x="200" y="244" font-family="Arial" font-size="10" text-anchor="middle" font-weight="bold">2</text>
+            </g>
+
+            <!-- Safa Marwa -->
+            <g>
+                <circle cx="250" cy="240" r="10" fill="var(--accent)" />
+                <text x="250" y="225" font-family="Amiri" font-size="12" text-anchor="middle" font-weight="bold" fill="var(--accent)">سعی</text>
+                <circle cx="250" cy="240" r="14" fill="white" stroke="var(--primary)" stroke-width="2" opacity="0.9" />
+                <text x="250" y="244" font-family="Arial" font-size="10" text-anchor="middle" font-weight="bold">3</text>
+            </g>
+
+            <!-- Final Step -->
+            <g transform="translate(320, 240)">
+                <path d="M -10 0 L 10 0 M 0 -10 L 0 10" stroke="var(--primary)" stroke-width="2" opacity="0.3" />
+                <text x="0" y="-15" font-family="Amiri" font-size="12" text-anchor="middle" font-weight="bold" fill="var(--text-main)">بال کٹوانا</text>
+                <circle r="14" fill="white" stroke="var(--primary)" stroke-width="2" opacity="0.9" />
+                <text y="4" font-family="Arial" font-size="10" text-anchor="middle" font-weight="bold">4</text>
+            </g>
+        </svg>`;
+
+        legendHtml = `
+            <div class="jm-legend-item">
+                <div class="jm-legend-num" style="background:var(--primary);">1</div>
+                <div class="jm-legend-text"><strong>احرام و نیت</strong>اپنے میقات (${miqat.name}) سے احرام باندھیں اور عمرہ کی نیت کریں۔</div>
+            </div>
+            <div class="jm-legend-item">
+                <div class="jm-legend-num" style="background:var(--primary);">2</div>
+                <div class="jm-legend-text"><strong>طوافِ کعبہ</strong>مسجد الحرام پہنچ کر بیت اللہ کے ۷ چکر لگائیں۔</div>
+            </div>
+            <div class="jm-legend-item">
+                <div class="jm-legend-num" style="background:var(--primary);">3</div>
+                <div class="jm-legend-text"><strong>سعی (صفا و مروہ)</strong>صفا اور مروہ کی پہاڑیوں کے درمیان ۷ چکر لگائیں۔</div>
+            </div>
+            <div class="jm-legend-item">
+                <div class="jm-legend-num" style="background:var(--primary);">4</div>
+                <div class="jm-legend-text"><strong>حلق یا تقصیر</strong>بال کٹوا کر احرام کھول دیں (عمرہ مکمل)۔</div>
+            </div>
+        `;
+    } else {
+        // Hajj Map
+        svgHtml = `
+        <svg viewBox="0 0 450 350" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background detail -->
+            <path d="M 50 50 Q 150 20 250 60 Q 350 40 400 80" fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="2" />
+            
+            <!-- Routes with arrows -->
+            <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(0,0,0,0.2)" />
+                </marker>
+            </defs>
+
+            <!-- 8th: Makkah to Mina -->
+            <path d="M 100 200 Q 140 180 180 180" fill="none" stroke="#0f766e" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrow)" />
+            <!-- 9th: Mina to Arafat -->
+            <path d="M 180 180 Q 240 200 300 220" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrow)" />
+            <!-- 9th night: Arafat to Muzdalifa -->
+            <path d="M 300 220 Q 275 210 250 200" fill="none" stroke="#b45309" stroke-width="3" marker-end="url(#arrow)" />
+            <!-- 10th: Muzdalifa to Mina -->
+            <path d="M 250 200 Q 215 190 180 180" fill="none" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow)" />
+            <!-- 10th: Mina to Makkah (Tawaf) -->
+            <path d="M 180 180 Q 140 210 100 200" fill="none" stroke="#7c3aed" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrow)" />
+
+            <!-- Locations -->
+            <g>
+                <rect x="85" y="185" width="30" height="30" rx="3" fill="#1e293b" />
+                <text x="100" y="175" font-family="Amiri" font-size="14" text-anchor="middle" font-weight="bold" fill="var(--text-main)">مکہ</text>
+                <circle cx="100" cy="200" r="14" fill="white" stroke="#334155" stroke-width="2" opacity="0.9" />
+                <text x="100" y="204" font-family="Arial" font-size="10" text-anchor="middle" font-weight="bold">1</text>
+            </g>
+
+            <g>
+                <circle cx="180" cy="180" r="10" fill="#0f766e" />
+                <text x="180" y="165" font-family="Amiri" font-size="12" text-anchor="middle" font-weight="bold" fill="#0f766e">منیٰ</text>
+                <circle cx="180" cy="180" r="14" fill="white" stroke="#0f766e" stroke-width="2" opacity="0.9" />
+                <text x="180" y="184" font-family="Arial" font-size="10" text-anchor="middle" font-weight="bold">2</text>
+            </g>
+
+            <g>
+                <circle cx="300" cy="220" r="10" fill="#b45309" />
+                <text x="300" y="245" font-family="Amiri" font-size="12" text-anchor="middle" font-weight="bold" fill="#b45309">عرفات</text>
+                <circle cx="300" cy="220" r="14" fill="white" stroke="#b45309" stroke-width="2" opacity="0.9" />
+                <text x="300" y="224" font-family="Arial" font-size="10" text-anchor="middle" font-weight="bold">3</text>
+            </g>
+
+            <g>
+                <circle cx="250" cy="200" r="8" fill="#7c3aed" />
+                <text x="250" y="225" font-family="Amiri" font-size="11" text-anchor="middle" font-weight="bold" fill="#7c3aed">مزدلفہ</text>
+                <circle cx="250" cy="200" r="12" fill="white" stroke="#7c3aed" stroke-width="2" opacity="0.9" />
+                <text x="250" y="204" font-family="Arial" font-size="9" text-anchor="middle" font-weight="bold">4</text>
+            </g>
+            
+            <g transform="translate(100, 230)">
+                <text x="0" y="15" font-family="Amiri" font-size="11" text-anchor="middle" fill="var(--text-muted)">واپسی و طواف</text>
+                <circle r="12" fill="white" stroke="#7c3aed" stroke-width="2" opacity="0.9" />
+                <text y="4" font-family="Arial" font-size="9" text-anchor="middle" font-weight="bold">5</text>
+            </g>
+        </svg>`;
+
+        legendHtml = `
+            <div class="jm-legend-item">
+                <div class="jm-legend-num" style="background:#0f766e;">1</div>
+                <div class="jm-legend-text"><strong>۸ ذی الحجہ (منیٰ)</strong>مکہ سے منیٰ روانگی اور وہاں پانچ نمازیں ادا کرنا۔</div>
+            </div>
+            <div class="jm-legend-item">
+                <div class="jm-legend-num" style="background:#b45309;">2</div>
+                <div class="jm-legend-text"><strong>۹ ذی الحجہ (عرفات)</strong>سورج ڈھلنے کے بعد وقوفِ عرفہ (حج کا سب سے بڑا رکن)۔</div>
+            </div>
+            <div class="jm-legend-item">
+                <div class="jm-legend-num" style="background:#b45309;">3</div>
+                <div class="jm-legend-text"><strong>۹ ذی الحجہ (مزدلفہ)</strong>مغرب کے بعد مزدلفہ روانگی اور وہاں رات گزارنا۔</div>
+            </div>
+            <div class="jm-legend-item">
+                <div class="jm-legend-num" style="background:#7c3aed;">4</div>
+                <div class="jm-legend-text"><strong>۱۰ ذی الحجہ (عید)</strong>منیٰ واپسی، رمی، قربانی، اور بال کٹوانا۔</div>
+            </div>
+            <div class="jm-legend-item">
+                <div class="jm-legend-num" style="background:#7c3aed;">5</div>
+                <div class="jm-legend-text"><strong>طوافِ زیارت</strong>مکہ جا کر طوافِ زیارت کرنا اور واپس منیٰ آنا۔</div>
+            </div>
+        `;
+    }
+
+    canvas.innerHTML = svgHtml;
+    legend.innerHTML = legendHtml;
+}
+
 const themeSettingsToggle = document.getElementById('dark-mode-toggle-settings');
 
 function setTheme(theme) {
@@ -1021,8 +1531,210 @@ window.onload = () => {
     // Render Namaz Guide
     renderNamazGuide();
 
+    // Render Hajj & Umrah
+    renderHajjUmrahSection();
+
     // Default Page
     navigateTo('home');
 };
+
+// =====================================================
+// QIBLA COMPASS LOGIC
+// =====================================================
+
+const KAABA_LAT = 21.422487;
+const KAABA_LON = 39.826206;
+let compassWatchId = null;
+let deviceOrientationListener = null;
+let qiblaBearing = 0;
+let userLat = null;
+let userLon = null;
+
+function openCompass() {
+    document.getElementById('compass-modal').classList.add('active');
+    initCompass();
+}
+
+function closeCompass() {
+    document.getElementById('compass-modal').classList.remove('active');
+    stopCompass();
+}
+
+function initCompass() {
+    const statusText = document.getElementById('compass-status-text');
+    const statusIcon = document.getElementById('compass-status-icon');
+    
+    statusText.innerText = "Locating your position...";
+    statusIcon.className = "fas fa-circle-notch fa-spin";
+    
+    // Generate tick marks for the compass ring
+    const ticksContainer = document.getElementById('compass-ticks');
+    if (ticksContainer.innerHTML === '') {
+        for (let i = 0; i < 360; i += 15) {
+            const tick = document.createElement('div');
+            tick.style.position = 'absolute';
+            tick.style.left = '50%';
+            tick.style.top = '0';
+            tick.style.bottom = '0';
+            tick.style.width = i % 90 === 0 ? '3px' : '1px';
+            tick.style.background = i % 90 === 0 ? 'var(--text-main)' : 'var(--text-muted)';
+            tick.style.transform = `translateX(-50%) rotate(${i}deg)`;
+            tick.style.opacity = i % 90 === 0 ? '0.5' : '0.2';
+            ticksContainer.appendChild(tick);
+        }
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                userLat = position.coords.latitude;
+                userLon = position.coords.longitude;
+                
+                // Calculate Qibla bearing and distance
+                qiblaBearing = calculateQiblaBearing(userLat, userLon);
+                const distance = calculateDistance(userLat, userLon, KAABA_LAT, KAABA_LON);
+                
+                document.getElementById('qibla-degrees').innerText = `${Math.round(qiblaBearing)}°`;
+                document.getElementById('makkah-distance').innerText = `${Math.round(distance).toLocaleString()} km`;
+                
+                statusText.innerText = "Calibrating compass...";
+                startDeviceOrientation();
+            },
+            error => {
+                statusIcon.className = "fas fa-exclamation-triangle";
+                statusText.innerText = "Location access denied or unavailable.";
+                statusIcon.style.color = "#ef4444";
+            },
+            { enableHighAccuracy: true }
+        );
+    } else {
+        statusIcon.className = "fas fa-exclamation-triangle";
+        statusText.innerText = "Geolocation not supported by your browser.";
+    }
+}
+
+function startDeviceOrientation() {
+    const statusText = document.getElementById('compass-status-text');
+    const statusIcon = document.getElementById('compass-status-icon');
+
+    // For iOS 13+ devices, we need to request permission
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission()
+            .then(permissionState => {
+                if (permissionState === 'granted') {
+                    attachOrientationListener();
+                } else {
+                    statusIcon.className = "fas fa-exclamation-triangle";
+                    statusText.innerText = "Compass permission denied.";
+                }
+            })
+            .catch(console.error);
+    } else {
+        // Non-iOS 13+ devices
+        attachOrientationListener();
+    }
+    
+    function attachOrientationListener() {
+        statusIcon.className = "fas fa-check-circle";
+        statusIcon.style.color = "var(--primary)";
+        statusText.innerText = "Compass active";
+        
+        deviceOrientationListener = function(event) {
+            let heading = null;
+            
+            // Check for iOS webkitCompassHeading
+            if (event.webkitCompassHeading) {
+                heading = event.webkitCompassHeading;
+            } 
+            // Check for absolute device orientation (Android)
+            else if (event.absolute && event.alpha !== null) {
+                // event.alpha is the bearing in degrees (0 = North, 90 = West, 180 = South, 270 = East for Android typically, 
+                // but absolute alpha usually gives 360 - alpha for heading)
+                heading = 360 - event.alpha;
+            }
+
+            if (heading !== null) {
+                updateCompassUI(heading);
+            } else {
+                statusText.innerText = "Move phone in figure-8 to calibrate";
+                statusIcon.className = "fas fa-sync fa-spin";
+            }
+        };
+
+        // Prefer absolute if available
+        if ('ondeviceorientationabsolute' in window) {
+            window.addEventListener('deviceorientationabsolute', deviceOrientationListener, true);
+        } else {
+            window.addEventListener('deviceorientation', deviceOrientationListener, true);
+        }
+    }
+}
+
+function stopCompass() {
+    if (deviceOrientationListener) {
+        if ('ondeviceorientationabsolute' in window) {
+            window.removeEventListener('deviceorientationabsolute', deviceOrientationListener, true);
+        } else {
+            window.removeEventListener('deviceorientation', deviceOrientationListener, true);
+        }
+        deviceOrientationListener = null;
+    }
+}
+
+function updateCompassUI(heading) {
+    const compassRing = document.getElementById('compass-ring');
+    const qiblaNeedle = document.getElementById('qibla-needle');
+    const degreeBadge = document.getElementById('compass-degree-badge');
+    
+    // Smooth out the degree display
+    degreeBadge.innerText = `${Math.round(heading)}°`;
+    
+    // Rotate the outer ring so N points to real North
+    compassRing.style.transform = `rotate(${-heading}deg)`;
+    
+    // Rotate the Qibla needle to point to Makkah relative to device
+    const needleRotation = qiblaBearing - heading;
+    qiblaNeedle.style.transform = `rotate(${needleRotation}deg)`;
+    
+    // Optional: vibrate when pointing directly at Qibla (within +/- 2 degrees)
+    const diff = Math.abs((heading - qiblaBearing + 360) % 360);
+    const minDiff = Math.min(diff, 360 - diff);
+    
+    const needleTip = document.querySelector('.needle-tip');
+    if (minDiff <= 2) {
+        needleTip.style.background = "#d4af37"; // Gold when aligned
+        needleTip.style.transform = "scale(1.1)";
+        if (navigator.vibrate) navigator.vibrate(50);
+    } else {
+        needleTip.style.background = "var(--primary)";
+        needleTip.style.transform = "scale(1)";
+    }
+}
+
+// Haversine formula for distance
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+// Calculate Bearing to Qibla
+function calculateQiblaBearing(lat1, lon1) {
+    const lat1Rad = lat1 * Math.PI / 180;
+    const lon1Rad = lon1 * Math.PI / 180;
+    const lat2Rad = KAABA_LAT * Math.PI / 180;
+    const lon2Rad = KAABA_LON * Math.PI / 180;
+
+    const y = Math.sin(lon2Rad - lon1Rad);
+    const x = Math.cos(lat1Rad) * Math.tan(lat2Rad) - Math.sin(lat1Rad) * Math.cos(lon2Rad - lon1Rad);
+    let qibla = Math.atan2(y, x) * 180 / Math.PI;
+    
+    return (qibla + 360) % 360;
+}
 
 

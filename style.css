@@ -48,6 +48,8 @@ body.font-large { font-size: 20px; }
     direction: rtl;
     color: var(--primary);
     margin-bottom: 0.5rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Header */
@@ -107,11 +109,16 @@ body.font-large { font-size: 20px; }
 .header-info .date-container {
     font-size: 0.85rem;
     opacity: 0.9;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    display: inline-block;
+    margin-top: 0.5rem;
 }
 
 /* Layout */
 main {
-    padding: 1.5rem 1.5rem 80px 1.5rem;
+    padding: 1rem 1rem 80px 1rem;
     max-width: 600px;
     margin: 0 auto;
 }
@@ -145,6 +152,12 @@ main {
     box-shadow: var(--shadow);
     margin-bottom: 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .hero-banner {
@@ -212,6 +225,17 @@ main {
     box-shadow: var(--shadow);
     cursor: pointer;
     transition: var(--transition);
+    border: 1px solid rgba(15, 118, 110, 0.05);
+}
+
+.action-btn:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.action-btn:hover i {
+    color: white;
 }
 
 .action-btn i {
@@ -220,6 +244,7 @@ main {
 
 .action-btn:active {
     transform: scale(0.95);
+    background: rgba(15, 118, 110, 0.1);
 }
 
 /* Prayer Times */
@@ -260,8 +285,8 @@ main {
 
 
 .counter-display {
-    width: 220px;
-    height: 220px;
+    width: min(220px, 60vw);
+    height: min(220px, 60vw);
     background: var(--card-bg);
     border-radius: 50%;
     margin: 2rem auto;
@@ -329,8 +354,15 @@ main {
     background: transparent;
     color: var(--primary);
     margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
     cursor: pointer;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    transition: var(--transition);
+    font-family: 'Poppins', sans-serif;
 }
+
+.cat-chip:active { transform: scale(0.95); }
 
 .cat-chip.active {
     background: var(--primary);
@@ -372,11 +404,13 @@ main {
 
 .nav-item.active {
     color: var(--primary);
+    font-weight: 600;
 }
 
 .nav-item.active i {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
     color: var(--primary);
+    text-shadow: 0 4px 10px rgba(15, 118, 110, 0.2);
 }
 
 /* Utilities */
@@ -396,6 +430,18 @@ main {
     font-size: 0.8rem;
     font-weight: 600;
     text-align: end;
+    color: var(--text-muted);
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
 }
 
 
@@ -431,11 +477,11 @@ main {
 .expandable-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
+    transition: max-height 0.4s ease-out;
 }
 
 .zikr-card.expanded .expandable-content {
-    max-height: 300px;
+    max-height: 1500px;
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px dashed var(--text-muted);
@@ -446,7 +492,11 @@ main {
     font-family: 'Amiri', serif;
     font-size: 1.2rem;
     direction: rtl;
+    text-align: right;
     margin-bottom: 0.5rem;
+    line-height: 1.9rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 [lang="ur"] body {
@@ -462,7 +512,22 @@ main {
     font-size: 0.85rem;
     color: var(--text-muted);
     font-style: italic;
+    line-height: 1.6;
+    word-break: break-word;
 }
+
+/* Expand hint */
+.expand-hint {
+    font-size: 0.72rem;
+    color: var(--primary);
+    opacity: 0.7;
+    margin-top: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.zikr-card.expanded .expand-hint { display: none; }
 
 /* Footer & Progress */
 .zikr-footer {
@@ -569,10 +634,20 @@ main {
 }
 
 .prayer-times-collapsible {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease, margin 0.4s ease;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    opacity: 0;
+}
+
+.prayer-times-collapsible.expanded {
+    max-height: 500px; /* Adjust as needed */
     margin-bottom: 2rem;
     padding-bottom: 1rem;
     border-bottom: 1px dashed var(--text-muted);
-    animation: fadeIn 0.3s ease-out;
+    opacity: 1;
 }
 
 .guide-module {
@@ -597,6 +672,11 @@ main {
     align-items: center;
     font-weight: 700;
     color: var(--primary);
+    transition: background 0.3s ease;
+}
+
+.guide-header:hover {
+    background: rgba(15, 118, 110, 0.1);
 }
 
 .guide-header i {
@@ -615,11 +695,11 @@ main {
 }
 
 .guide-module.expanded .guide-content {
-    max-height: 2500px; /* Large enough to hold content */
+    max-height: 6000px;
 }
 
 .guide-section {
-    padding: 1.5rem;
+    padding: 1.2rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -678,7 +758,10 @@ main {
 
 .guide-step-desc {
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .guide-arabic-block {
@@ -696,6 +779,8 @@ main {
     font-size: 1.4rem;
     color: var(--primary-dark);
     line-height: 2.2rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 [data-theme="dark"] .guide-arabic-text {
@@ -703,10 +788,15 @@ main {
 }
 
 .guide-urdu-text {
-    font-family: 'Amiri', 'Poppins', sans-serif;
+    font-family: 'Amiri', serif;
     color: var(--text-muted);
-    font-size: 1.1rem;
-    margin-top: 0.5rem;
+    font-size: 1.05rem;
+    margin-top: 0.6rem;
+    direction: rtl;
+    text-align: right;
+    line-height: 1.9rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .guide-list {
@@ -742,7 +832,834 @@ main {
 }
 
 
+/* ===================== Hajj & Umrah Styles ===================== */
+
+/* Sub-nav tabs */
+.hu-subnav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.hu-subnav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1rem;
+    border-radius: 1rem;
+    border: 2px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Amiri', serif;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.hu-subnav-btn i { font-size: 1.2rem; }
+
+.hu-subnav-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 6px 20px rgba(15, 118, 110, 0.35);
+}
+
+.hu-subnav-btn:not(.active):hover {
+    background: rgba(15, 118, 110, 0.08);
+}
+
+/* Tab panels */
+.hu-tab { display: none; animation: fadeIn 0.4s ease-out; }
+.hu-tab.active { display: block; }
+
+/* Hajj type selector cards */
+.hajj-type-selector { margin-bottom: 1.5rem; }
+
+.hajj-type-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+}
+
+.hajj-type-card {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 1rem 1.2rem;
+    border: 2px solid transparent;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.hajj-type-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.hajj-type-card.selected {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, rgba(15,118,110,0.06), rgba(15,118,110,0.02));
+}
+
+.hajj-type-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.hajj-type-info { flex-grow: 1; }
+
+.hajj-type-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    font-family: 'Amiri', serif;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    direction: rtl;
+}
+
+.badge-afzal {
+    font-size: 0.65rem;
+    font-family: 'Poppins', sans-serif;
+    background: var(--accent);
+    color: #0f172a;
+    padding: 0.1rem 0.5rem;
+    border-radius: 2rem;
+    font-weight: 700;
+}
+
+.hajj-type-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    direction: rtl;
+    text-align: right;
+    font-family: 'Amiri', serif;
+    line-height: 1.5;
+}
+
+/* HU info card (steps, duas, masail, etc.) */
+.hu-info-card {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    margin-bottom: 1.2rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+[data-theme="dark"] .hu-info-card { border-color: rgba(255,255,255,0.05); }
+
+.hu-info-header {
+    padding: 1rem 1.2rem;
+    background: rgba(15,118,110,0.06);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    color: var(--primary);
+    transition: background 0.3s;
+    gap: 0.8rem;
+}
+
+.hu-info-header:hover { background: rgba(15,118,110,0.12); }
+
+.hu-info-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.hu-info-header-icon {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.hu-info-title {
+    font-size: 0.95rem;
+    direction: rtl;
+    font-family: 'Amiri', serif;
+    line-height: 1.3;
+}
+
+.hu-info-chevron { transition: transform 0.3s ease; flex-shrink: 0; }
+.hu-info-card.expanded .hu-info-chevron { transform: rotate(180deg); }
+
+.hu-info-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.45s ease-in-out;
+}
+
+.hu-info-card.expanded .hu-info-body { max-height: 8000px; }
+
+.hu-info-inner { padding: 1rem 1.2rem 1.2rem; }
+
+/* Umrah step card */
+.hu-step {
+    display: flex;
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.hu-step-num {
+    width: 30px;
+    height: 30px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.hu-step-body { flex-grow: 1; direction: rtl; text-align: right; }
+
+.hu-step-title {
+    font-weight: 700;
+    font-family: 'Amiri', serif;
+    font-size: 1rem;
+    color: var(--text-main);
+    margin-bottom: 0.3rem;
+}
+
+.hu-step-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    direction: rtl;
+    text-align: right;
+    font-family: 'Amiri', serif;
+    line-height: 1.75;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.hu-arabic-block {
+    margin-top: 0.8rem;
+    padding: 0.9rem;
+    background: rgba(15,118,110,0.05);
+    border-radius: 0.8rem;
+    border-right: 3px solid var(--primary);
+    direction: rtl;
+    text-align: right;
+}
+
+.hu-arabic-text {
+    font-family: 'Amiri', serif;
+    font-size: 1.3rem;
+    color: var(--primary-dark);
+    line-height: 2rem;
+    word-break: break-word;
+}
+
+[data-theme="dark"] .hu-arabic-text { color: var(--accent); }
+
+.hu-arabic-translation {
+    font-family: 'Amiri', serif;
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    line-height: 1.85rem;
+    direction: rtl;
+    text-align: right;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.hu-note {
+    margin-top: 0.7rem;
+    padding: 0.7rem 0.9rem;
+    background: rgba(212, 175, 55, 0.1);
+    border-left: 3px solid var(--accent);
+    border-radius: 0.5rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    direction: rtl;
+    text-align: right;
+    font-family: 'Amiri', serif;
+    line-height: 1.7;
+    word-break: break-word;
+}
+
+.hu-list {
+    list-style: none;
+    padding: 0;
+    direction: rtl;
+    text-align: right;
+}
+
+.hu-list li {
+    position: relative;
+    padding-right: 1.4rem;
+    padding-bottom: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    font-family: 'Amiri', serif;
+    line-height: 1.7;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.hu-list li::before {
+    content: '●';
+    position: absolute;
+    right: 0;
+    color: var(--accent);
+    font-size: 0.7rem;
+    top: 0.3rem;
+}
+
+.hu-section-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.hu-divider {
+    border: none;
+    border-top: 1px dashed rgba(0,0,0,0.1);
+    margin: 0.9rem 0;
+}
+
+[data-theme="dark"] .hu-divider { border-color: rgba(255,255,255,0.07); }
+
+.hu-gender-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.hu-gender-box {
+    padding: 0.7rem;
+    border-radius: 0.7rem;
+    background: rgba(15,118,110,0.05);
+    direction: rtl;
+    text-align: right;
+}
+
+.hu-gender-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+/* Back button for Hajj type */
+.hu-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+}
+.hu-back-btn:hover { background: var(--primary); color: white; }
+
+/* Section heading badge */
+.hu-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    direction: rtl;
+}
+
+.hu-section-heading-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: 'Amiri', serif;
+    color: var(--text-main);
+}
+
+.hu-section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to left, transparent, var(--primary));
+    opacity: 0.3;
+}
+
+@media (max-width: 480px) {
+    .hu-subnav-btn { font-size: 0.9rem; padding: 0.75rem; }
+    .hu-arabic-text { font-size: 1.15rem; line-height: 1.8rem; }
+    .hu-gender-row { grid-template-columns: 1fr; }
+}
+
+/* ===================== Journey Map Modal ===================== */
+
+/* Map open button */
+.jm-open-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.85rem 1.2rem;
+    margin-bottom: 1.2rem;
+    border-radius: 1rem;
+    border: 2px dashed var(--primary);
+    background: rgba(15,118,110,0.04);
+    color: var(--primary);
+    font-family: 'Amiri', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    direction: rtl;
+    justify-content: center;
+}
+.jm-open-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-style: solid;
+}
+.jm-open-btn i { font-size: 1.2rem; }
+
+/* Modal overlay */
+.jm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 9000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.jm-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Modal sheet */
+.jm-container {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 520px;
+    max-height: 92vh;
+    border-radius: 1.5rem 1.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    overflow: hidden;
+}
+.jm-overlay.active .jm-container { transform: translateY(0); }
+
+/* Header */
+.jm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.2rem;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    flex-shrink: 0;
+}
+.jm-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-family: 'Amiri', serif;
+    font-size: 1.1rem;
+}
+.jm-close-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+.jm-close-btn:hover { background: rgba(255,255,255,0.35); }
+
+/* Miqat row */
+.jm-miqat-row {
+    padding: 0.8rem 1.2rem;
+    background: rgba(15,118,110,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+[data-theme="dark"] .jm-miqat-row { border-color: rgba(255,255,255,0.06); }
+
+.jm-miqat-label {
+    font-size: 0.82rem;
+    color: var(--primary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.jm-miqat-select {
+    width: 100%;
+    padding: 0.55rem 0.8rem;
+    border-radius: 0.7rem;
+    border: 1.5px solid rgba(15,118,110,0.3);
+    background: var(--card-bg);
+    color: var(--text-main);
+    font-size: 0.88rem;
+    font-family: 'Amiri', serif;
+    cursor: pointer;
+    outline: none;
+    direction: rtl;
+}
+.jm-miqat-select:focus { border-color: var(--primary); }
+
+/* Day legend (Hajj) */
+.jm-day-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    padding: 0.6rem 1.2rem;
+    background: rgba(15,118,110,0.03);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: 'Amiri', serif;
+    flex-shrink: 0;
+}
+.jm-day-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* SVG canvas wrapper */
+.jm-canvas-wrap {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+}
+#journey-map-canvas {
+    width: 100%;
+    min-height: 200px;
+}
+#journey-map-canvas svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Step legend */
+.jm-step-legend {
+    padding: 0.8rem 1.2rem;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-height: 180px;
+    overflow-y: auto;
+    flex-shrink: 0;
+    background: var(--card-bg);
+}
+[data-theme="dark"] .jm-step-legend { border-color: rgba(255,255,255,0.06); }
+
+.jm-legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    direction: rtl;
+}
+.jm-legend-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+.jm-legend-text {
+    font-family: 'Amiri', serif;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    padding-top: 0.1rem;
+}
+.jm-legend-text strong {
+    color: var(--text-main);
+    display: block;
+    font-size: 0.9rem;
+}
+
+/* Settings Styles */
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    gap: 1rem;
+}
+
+[data-theme="dark"] .setting-item { border-color: rgba(255,255,255,0.06); }
+
+.setting-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.setting-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.setting-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #cbd5e1;
+    border-radius: 26px;
+    transition: 0.3s;
+}
+
+.slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.toggle-switch input:checked + .slider { background: var(--primary); }
+.toggle-switch input:checked + .slider::before { transform: translateX(24px); }
+
+/* Selects */
+.mini-select {
+    padding: 0.45rem 0.7rem;
+    border-radius: 0.7rem;
+    border: 1.5px solid rgba(15,118,110,0.25);
+    background: var(--card-bg);
+    color: var(--text-main);
+    font-size: 0.85rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.mini-select:focus { border-color: var(--primary); }
+
+.tasbeeh-dropdown {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.7rem 1rem;
+    border-radius: 1rem;
+    border: 1.5px solid rgba(15,118,110,0.2);
+    background: var(--card-bg);
+    color: var(--text-main);
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 0.5rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.tasbeeh-dropdown:focus { border-color: var(--primary); }
+
+/* Danger button */
+.danger-btn {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 1rem;
+    border: 1.5px solid rgba(239,68,68,0.2);
+    background: rgba(239,68,68,0.08);
+    color: #ef4444;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Poppins', sans-serif;
+}
+.danger-btn:hover { background: #ef4444; color: white; }
+
+/* Location box */
+.location-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.8rem;
+    padding: 0.5rem 0.8rem;
+    background: rgba(15,118,110,0.05);
+    border-radius: 0.7rem;
+}
+.location-box i { color: var(--primary); }
+
+/* Azkar categories */
+.azkar-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+}
+
 /* Responsive Adjustments */
+@media (max-width: 480px) {
+    .app-header {
+        padding: 1rem;
+        border-bottom-left-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
+    }
+
+    .header-info .greeting {
+        font-size: 1.2rem;
+    }
+
+    .hero-banner {
+        height: 150px;
+    }
+
+    .next-prayer-card h2 {
+        font-size: 1.5rem;
+    }
+
+    .card, .zikr-card, .guide-module {
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    .guide-header {
+        padding: 1rem;
+    }
+
+    .guide-section {
+        padding: 0.8rem;
+    }
+
+    .guide-step {
+        gap: 0.8rem;
+    }
+
+    .guide-arabic-block {
+        padding: 0.8rem;
+    }
+
+    .guide-arabic-text {
+        font-size: 1.2rem;
+        line-height: 1.8rem;
+    }
+
+    .arabic-text {
+        font-size: 1.3rem;
+        word-break: break-word;
+    }
+
+    .zikr-footer {
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+
+    .zikr-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .count-btn {
+        flex-grow: 1;
+    }
+
+    #tasbeeh-count {
+        font-size: 3rem;
+    }
+
+    .tasbeeh-controls {
+        gap: 1rem;
+    }
+}
+
 @media (min-width: 768px) {
     body {
         font-size: 18px;
@@ -758,4 +1675,313 @@ main {
         transform: translateX(-50%);
         border-radius: 2rem 2rem 0 0;
     }
+}
+
+/* ===================== Qibla Compass Modal ===================== */
+.compass-action-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+.compass-action-btn:hover {
+    box-shadow: 0 4px 15px rgba(15, 118, 110, 0.4);
+}
+
+.compass-action-btn i {
+    color: white;
+}
+
+.compass-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 10000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.compass-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.compass-container {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 1.5rem 1.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
+}
+
+.compass-overlay.active .compass-container {
+    transform: translateY(0);
+}
+
+.compass-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+[data-theme="dark"] .compass-header {
+    border-bottom-color: rgba(255,255,255,0.05);
+}
+
+.compass-hdr-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.compass-hdr-icon {
+    font-size: 1.5rem;
+    color: var(--primary);
+    background: rgba(15,118,110,0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.compass-hdr-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+.compass-hdr-sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: 'Amiri', serif;
+}
+
+.compass-close-btn {
+    background: rgba(0,0,0,0.05);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+[data-theme="dark"] .compass-close-btn {
+    background: rgba(255,255,255,0.1);
+}
+
+.compass-close-btn:hover {
+    background: rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] .compass-close-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.compass-status-bar {
+    text-align: center;
+    padding: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: rgba(15,118,110,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.compass-dial-area {
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.compass-wrap {
+    width: 280px;
+    height: 280px;
+    position: relative;
+    border-radius: 50%;
+    background: var(--card-bg);
+    box-shadow: 
+        0 0 0 10px rgba(15,118,110,0.05),
+        inset 0 0 20px rgba(0,0,0,0.05),
+        0 15px 30px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[data-theme="dark"] .compass-wrap {
+    box-shadow: 
+        0 0 0 10px rgba(15,118,110,0.15),
+        inset 0 0 20px rgba(0,0,0,0.3),
+        0 15px 30px rgba(0,0,0,0.3);
+}
+
+.compass-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: transform 0.1s ease-out; /* Smooth rotation */
+}
+
+.crd {
+    position: absolute;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 1rem;
+    transform-origin: center;
+}
+
+.crd.n { top: 10px; left: 50%; transform: translateX(-50%); color: #ef4444; font-size: 1.2rem; }
+.crd.s { bottom: 10px; left: 50%; transform: translateX(-50%); }
+.crd.e { right: 15px; top: 50%; transform: translateY(-50%); }
+.crd.w { left: 15px; top: 50%; transform: translateY(-50%); }
+.crd.ne { top: 40px; right: 40px; font-size: 0.8rem; opacity: 0.7; }
+.crd.nw { top: 40px; left: 40px; font-size: 0.8rem; opacity: 0.7; }
+.crd.se { bottom: 40px; right: 40px; font-size: 0.8rem; opacity: 0.7; }
+.crd.sw { bottom: 40px; left: 40px; font-size: 0.8rem; opacity: 0.7; }
+
+/* The needle container rotates to point to Qibla */
+.qibla-needle-wrap {
+    position: absolute;
+    width: 20px;
+    height: 240px;
+    left: calc(50% - 10px);
+    top: calc(50% - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.1s ease-out;
+    z-index: 10;
+}
+
+.needle-tip {
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(15,118,110,0.4);
+    z-index: 2;
+    position: absolute;
+    top: 0;
+}
+
+.needle-shaft-top {
+    width: 4px;
+    height: 100px;
+    background: linear-gradient(to bottom, var(--primary), transparent);
+    position: absolute;
+    top: 30px;
+}
+
+.needle-center-dot {
+    width: 14px;
+    height: 14px;
+    background: var(--text-main);
+    border-radius: 50%;
+    position: absolute;
+    top: calc(50% - 7px);
+    z-index: 3;
+    border: 3px solid var(--card-bg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.needle-shaft-bot {
+    width: 2px;
+    height: 90px;
+    background: linear-gradient(to top, rgba(0,0,0,0.2), transparent);
+    position: absolute;
+    bottom: 20px;
+}
+
+[data-theme="dark"] .needle-shaft-bot {
+    background: linear-gradient(to top, rgba(255,255,255,0.2), transparent);
+}
+
+.compass-degree-badge {
+    position: absolute;
+    bottom: -15px;
+    background: var(--primary);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(15,118,110,0.3);
+    z-index: 20;
+}
+
+.compass-info-row {
+    display: flex;
+    padding: 1.5rem;
+    background: rgba(15,118,110,0.03);
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+[data-theme="dark"] .compass-info-row {
+    border-top-color: rgba(255,255,255,0.05);
+}
+
+.compass-info-card {
+    flex: 1;
+    text-align: center;
+}
+
+.compass-info-divider {
+    width: 1px;
+    background: rgba(0,0,0,0.1);
+    margin: 0 1rem;
+}
+
+[data-theme="dark"] .compass-info-divider {
+    background: rgba(255,255,255,0.1);
+}
+
+.ci-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: 'Amiri', serif;
+    margin-bottom: 0.3rem;
+}
+
+.ci-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.compass-hint {
+    text-align: center;
+    padding: 0 1rem 1.5rem;
+    font-size: 0.85rem;
+    color: var(--primary);
+    font-family: 'Amiri', serif;
+    opacity: 0.8;
 }

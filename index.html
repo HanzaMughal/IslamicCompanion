@@ -66,16 +66,21 @@
                     <span data-i18n="azkar">Azkar</span>
                 </button>
                 <button onclick="navigateTo('tasbeeh')" class="action-btn">
-                    <div class="action-icon-wrapper">
-                        <i class="fas fa-beads"></i>
-                    </div>
+                    <i class="fas fa-beads"></i>
                     <span data-i18n="tasbeeh">Tasbeeh</span>
                 </button>
-                <button onclick="navigateTo('prayer')" class="action-btn prayer-action-btn">
+                <button onclick="navigateTo('prayer')" class="action-btn">
                     <i class="fas fa-person-praying"></i>
                     <span data-i18n="prayer">Prayer</span>
                 </button>
-
+                <button onclick="navigateTo('hajj-umrah')" class="action-btn">
+                    <i class="fas fa-kaaba"></i>
+                    <span data-i18n="hajj-umrah">Hajj &amp; Umrah</span>
+                </button>
+                <button onclick="openCompass()" class="action-btn compass-action-btn">
+                    <i class="fas fa-compass"></i>
+                    <span>Qibla</span>
+                </button>
             </div>
 
 
@@ -107,7 +112,7 @@
                 </button>
             </div>
 
-            <div id="prayer-times-container" class="prayer-times-collapsible" style="display: none;">
+            <div id="prayer-times-container" class="prayer-times-collapsible">
                 <div class="location-box">
                     <i class="fas fa-location-dot"></i>
                     <span id="location-name" data-i18n="detecting">Detecting location...</span>
@@ -141,9 +146,42 @@
             </div>
         </section>
 
+        <!-- Hajj & Umrah Section -->
+        <section id="hajj-umrah" class="page">
+            <!-- Sub-navigation -->
+            <div class="hu-subnav">
+                <button class="hu-subnav-btn active" id="btn-umrah" onclick="showHajjUmrahTab('umrah')">
+                    <i class="fas fa-kaaba"></i>
+                    <span>عمرہ</span>
+                </button>
+                <button class="hu-subnav-btn" id="btn-hajj" onclick="showHajjUmrahTab('hajj')">
+                    <i class="fas fa-star-and-crescent"></i>
+                    <span>حج</span>
+                </button>
+            </div>
 
+            <!-- Umrah Tab -->
+            <div id="hu-tab-umrah" class="hu-tab active">
+                <div id="umrah-container" class="list-container">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
 
-
+            <!-- Hajj Tab -->
+            <div id="hu-tab-hajj" class="hu-tab">
+                <!-- Hajj type selector -->
+                <div id="hajj-type-selector" class="hajj-type-selector">
+                    <h3 class="section-title" style="text-align:center;">حج کی قسم منتخب کریں</h3>
+                    <div id="hajj-type-container">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+                <!-- Hajj content -->
+                <div id="hajj-content-container" class="list-container">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
 
         <!-- Tasbeeh Section -->
         <section id="tasbeeh" class="page">
@@ -220,22 +258,138 @@
         <button class="nav-item active" onclick="navigateTo('home')" data-target="home">
             <i class="fas fa-home"></i>
             <span data-i18n="home">Home</span>
-
         </button>
         <button class="nav-item" onclick="navigateTo('prayer')" data-target="prayer">
             <i class="fas fa-person-praying"></i>
             <span data-i18n="prayer">Prayer</span>
         </button>
-
-
-
-
+        <button class="nav-item" onclick="navigateTo('hajj-umrah')" data-target="hajj-umrah">
+            <i class="fas fa-kaaba"></i>
+            <span data-i18n="hajj-umrah">Hajj &amp; Umrah</span>
+        </button>
         <button class="nav-item" onclick="navigateTo('settings')" data-target="settings">
             <i class="fas fa-gear"></i>
             <span data-i18n="settings">Settings</span>
-
         </button>
     </nav>
+
+    <!-- Journey Map Modal -->
+    <div id="journey-map-modal" class="jm-overlay">
+        <div class="jm-container">
+            <div class="jm-header">
+                <div class="jm-header-left">
+                    <i class="fas fa-map-location-dot"></i>
+                    <span class="jm-title">نقشہ</span>
+                </div>
+                <button class="jm-close-btn" onclick="closeJourneyMap()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Miqat selector (Umrah only) -->
+            <div id="miqat-selector-row" class="jm-miqat-row">
+                <label class="jm-miqat-label"><i class="fas fa-location-dot"></i> اپنا میقات منتخب کریں:</label>
+                <select id="miqat-map-select" class="jm-miqat-select" onchange="onMiqatChange(this.value)">
+                    <option value="dhulhulaifa">ذوالحلیفہ — مدینہ کی جانب</option>
+                    <option value="yalamlam">یلملم — یمن کی جانب</option>
+                    <option value="qarnulmanazil">قرن المنازل — نجد کی جانب</option>
+                    <option value="dhatayrq">ذات عرق — عراق کی جانب</option>
+                    <option value="juhfa">الجُحفہ — شام / مصر کی جانب</option>
+                    <option value="makkah_resident">جعرانہ / تنعیم — مکہ مقیم</option>
+                </select>
+            </div>
+
+            <!-- Hajj day legend -->
+            <div id="hajj-map-legend" class="jm-day-legend">
+                <span class="jm-day-dot" style="background:#0f766e;"></span><span>۸ ذی الحجہ</span>
+                <span class="jm-day-dot" style="background:#b45309;"></span><span>۹ ذی الحجہ</span>
+                <span class="jm-day-dot" style="background:#7c3aed;"></span><span>۱۰ ذی الحجہ</span>
+                <span class="jm-day-dot" style="background:#0369a1;"></span><span>ایام تشریق</span>
+                <span class="jm-day-dot" style="background:#be185d;"></span><span>وداع</span>
+            </div>
+
+            <!-- Map canvas -->
+            <div class="jm-canvas-wrap">
+                <div id="journey-map-canvas"></div>
+            </div>
+
+            <!-- Step legend -->
+            <div id="journey-step-legend" class="jm-step-legend"></div>
+        </div>
+    </div>
+
+    <!-- Qibla Compass Modal -->
+    <div id="compass-modal" class="compass-overlay">
+        <div class="compass-container">
+            <!-- Header -->
+            <div class="compass-header">
+                <div class="compass-hdr-left">
+                    <i class="fas fa-compass compass-hdr-icon"></i>
+                    <div>
+                        <div class="compass-hdr-title">Qibla Compass</div>
+                        <div class="compass-hdr-sub">قبلہ نما</div>
+                    </div>
+                </div>
+                <button class="compass-close-btn" onclick="closeCompass()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Status bar -->
+            <div class="compass-status-bar" id="compass-status-bar">
+                <i class="fas fa-circle-notch fa-spin" id="compass-status-icon"></i>
+                <span id="compass-status-text">Locating your position...</span>
+            </div>
+
+            <!-- Compass dial area -->
+            <div class="compass-dial-area">
+                <div class="compass-wrap" id="compass-wrap">
+                    <!-- Outer ring (rotates with device) -->
+                    <div class="compass-ring" id="compass-ring">
+                        <span class="crd n">N</span>
+                        <span class="crd e">E</span>
+                        <span class="crd s">S</span>
+                        <span class="crd w">W</span>
+                        <span class="crd ne">NE</span>
+                        <span class="crd se">SE</span>
+                        <span class="crd sw">SW</span>
+                        <span class="crd nw">NW</span>
+                        <!-- Tick marks generated by JS -->
+                        <div id="compass-ticks"></div>
+                    </div>
+
+                    <!-- Qibla needle (rotates to point to Makkah) -->
+                    <div class="qibla-needle-wrap" id="qibla-needle">
+                        <div class="needle-tip">
+                            <i class="fas fa-kaaba"></i>
+                        </div>
+                        <div class="needle-shaft-top"></div>
+                        <div class="needle-center-dot"></div>
+                        <div class="needle-shaft-bot"></div>
+                    </div>
+
+                    <!-- Degree ring label -->
+                    <div class="compass-degree-badge" id="compass-degree-badge">--°</div>
+                </div>
+            </div>
+
+            <!-- Info cards -->
+            <div class="compass-info-row">
+                <div class="compass-info-card">
+                    <div class="ci-label">قبلہ سمت</div>
+                    <div class="ci-value" id="qibla-degrees">--°</div>
+                </div>
+                <div class="compass-info-divider"></div>
+                <div class="compass-info-card">
+                    <div class="ci-label">مکہ مکرمہ</div>
+                    <div class="ci-value" id="makkah-distance">-- km</div>
+                </div>
+            </div>
+
+            <!-- Hint -->
+            <p class="compass-hint" id="compass-hint">اپنا فون افقی رکھیں اور سبز تیر کی سمت میں منہ کریں</p>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
