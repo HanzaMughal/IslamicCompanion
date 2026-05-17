@@ -32,7 +32,7 @@
         <div class="header-info">
             <div class="greeting" id="user-greeting" data-i18n="greeting">Assalamu Alaikum</div>
 
-            <div class="date-container">
+            <div class="date-container" onclick="openIslamicCalendar()">
                 <span id="gregorian-date">...</span> • <span id="hijri-date">...</span>
             </div>
         </div>
@@ -52,7 +52,8 @@
             </div>
 
             <div class="card quran-verse-card">
-                <div class="card-header"><i class="fas fa-book-open"></i> <span data-i18n="verse-day">Verse of the Day</span></div>
+                <div class="card-header"><i class="fas fa-book-open"></i> <span data-i18n="verse-day">Verse of the
+                        Day</span></div>
 
                 <p id="quran-arabic" class="arabic-text">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
                 <p id="quran-translation" class="translation">In the name of Allah, the Entirely Merciful, the
@@ -95,7 +96,8 @@
             <div class="azkar-categories">
                 <button class="cat-chip active" onclick="filterAzkar('morning')" data-i18n="morning">Morning</button>
                 <button class="cat-chip" onclick="filterAzkar('evening')" data-i18n="evening">Evening</button>
-                <button class="cat-chip" onclick="filterAzkar('after-prayer')" data-i18n="after-salah">After Salah</button>
+                <button class="cat-chip" onclick="filterAzkar('after-prayer')" data-i18n="after-salah">After
+                    Salah</button>
 
             </div>
             <div id="azkar-container" class="list-container">
@@ -218,7 +220,8 @@
                 <div class="setting-item">
                     <div class="setting-info">
                         <span class="setting-label" data-i18n="dark-mode">Dark Mode</span>
-                        <span class="setting-desc" data-i18n="dark-mode-desc">Switch between light and dark themes</span>
+                        <span class="setting-desc" data-i18n="dark-mode-desc">Switch between light and dark
+                            themes</span>
 
                     </div>
                     <label class="toggle-switch">
@@ -388,6 +391,52 @@
 
             <!-- Hint -->
             <p class="compass-hint" id="compass-hint">اپنا فون افقی رکھیں اور سبز تیر کی سمت میں منہ کریں</p>
+        </div>
+    </div>
+
+    <!-- Islamic Calendar Modal -->
+    <div id="calendar-modal" class="calendar-overlay">
+        <div class="calendar-container">
+            <div class="calendar-header-bar">
+                <div style="width:36px;"></div> <!-- Spacer -->
+                <div class="calendar-title" data-i18n="islamic-calendar">Islamic Calendar</div>
+                <button class="calendar-close-btn" onclick="closeIslamicCalendar()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Highlighted Greeting / Date Section -->
+            <div class="calendar-greeting-box">
+                <div class="cg-greeting" id="cal-greeting" data-i18n="greeting">Assalamu Alaikum</div>
+                <div class="cg-date">
+                    <span id="cal-gregorian-date">...</span> • <span id="cal-hijri-date">...</span>
+                </div>
+            </div>
+
+            <!-- Events ribbon -->
+            <div id="cal-events-ribbon" class="cal-events-ribbon"></div>
+
+            <div class="calendar-controls">
+                <button onclick="changeHijriMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                <div class="calendar-month-title" id="calendar-month-title">...</div>
+                <button onclick="changeHijriMonth(1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="cal-weekday">Sun</div>
+                <div class="cal-weekday">Mon</div>
+                <div class="cal-weekday">Tue</div>
+                <div class="cal-weekday">Wed</div>
+                <div class="cal-weekday">Thu</div>
+                <div class="cal-weekday friday-header">Fri</div>
+                <div class="cal-weekday">Sat</div>
+            </div>
+
+            <div id="cal-days-container" class="calendar-grid" style="margin-top: 0.2rem;">
+                <!-- Days will be generated here -->
+            </div>
+
+            <div id="cal-loading" class="cal-loading"><i class="fas fa-circle-notch fa-spin"></i> Loading...</div>
         </div>
     </div>
 

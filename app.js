@@ -1131,11 +1131,242 @@ function renderHajjUmrahDuasCard() {
 }
 
 // =====================================================
-// JOURNEY MAP LOGIC
+// JOURNEY MAP LOGIC — Enhanced 3D-Style Maps
 // =====================================================
 
 let currentMapMode = 'umrah';
 let selectedMiqat = 'dhulhulaifa';
+
+const MIQAT_INFO = {
+    dhulhulaifa:     { name: 'ذوالحلیفہ', x: 65,  y: 75  },
+    yalamlam:        { name: 'یلملم',     x: 230, y: 330 },
+    qarnulmanazil:   { name: 'قرن المنازل', x: 415, y: 95 },
+    dhatayrq:        { name: 'ذات عرق',   x: 400, y: 60  },
+    juhfa:           { name: 'الجحفہ',    x: 60,  y: 185 },
+    makkah_resident: { name: 'تنعیم',     x: 185, y: 230 }
+};
+
+// SVG helpers
+function isoCube(cx, cy, w, h, cT, cF, cS) {
+    const t = `${cx},${cy-h} ${cx+w},${cy-h*.5} ${cx},${cy} ${cx-w},${cy-h*.5}`;
+    const f = `${cx-w},${cy-h*.5} ${cx},${cy} ${cx},${cy+h*.5} ${cx-w},${cy}`;
+    const s = `${cx},${cy} ${cx+w},${cy-h*.5} ${cx+w},${cy} ${cx},${cy+h*.5}`;
+    return `<polygon points="${t}" fill="${cT}"/><polygon points="${f}" fill="${cF}"/><polygon points="${s}" fill="${cS}"/>`;
+}
+
+function kaaba3D(cx, cy, sc=1) {
+    const w=28*sc, h=24*sc;
+    let g = isoCube(cx, cy, w, h, '#374151','#1f2937','#111827');
+    g += `<polygon points="${cx},${cy-h} ${cx+w},${cy-h*.5} ${cx},${cy} ${cx-w},${cy-h*.5}" fill="none" stroke="#d4af37" stroke-width="${1.5*sc}"/>`;
+    g += `<rect x="${cx-w*.12}" y="${cy-h*.05}" width="${w*.24}" height="${h*.45}" rx="2" fill="#d4af37" opacity="0.9"/>`;
+    return g;
+}
+
+function hill(cx, cy, rx, ry, col) {
+    return `<ellipse cx="${cx}" cy="${cy+ry*.4}" rx="${rx}" ry="${ry*.5}" fill="${col}" opacity="0.4"/>
+            <ellipse cx="${cx}" cy="${cy}" rx="${rx*.8}" ry="${ry*.7}" fill="${col}"/>`;
+}
+
+function tent(cx, cy, col='#e8d5b7') {
+    return `<polygon points="${cx},${cy-18} ${cx+18},${cy-6} ${cx-18},${cy-6}" fill="${col}" stroke="#b8a09070" stroke-width="1.2"/>
+            <rect x="${cx-14}" y="${cy-6}" width="28" height="10" rx="1" fill="${col}cc" stroke="#b8a09060" stroke-width="1"/>`;
+}
+
+function mountain(cx, cy, col='#78716c') {
+    return `<polygon points="${cx-55},${cy} ${cx-8},${cy-48} ${cx+40},${cy}" fill="${col}" opacity="0.55"/>
+            <polygon points="${cx-25},${cy} ${cx+15},${cy-60} ${cx+65},${cy}" fill="${col}" opacity="0.9"/>
+            <polygon points="${cx+8},${cy-52} ${cx+15},${cy-60} ${cx+22},${cy-52}" fill="white" opacity="0.6"/>`;
+}
+
+function dot(cx, cy, n, col, pulse=false) {
+    return `${pulse?`<circle cx="${cx}" cy="${cy}" r="20" fill="${col}" opacity="0.12" class="map-pulse"/>`:''}<circle cx="${cx}" cy="${cy}" r="14" fill="${col}" filter="url(#gsh)"/>
+            <circle cx="${cx}" cy="${cy}" r="14" fill="none" stroke="white" stroke-width="2.5"/>
+            <text x="${cx}" y="${cy+4}" font-family="Arial" font-size="11" text-anchor="middle" fill="white" font-weight="bold">${n}</text>`;
+}
+
+function defs(skyA, skyB) {
+    return `<defs>
+      <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${skyA}"/><stop offset="100%" stop-color="${skyB}"/></linearGradient>
+      <filter id="gsh"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="#00000040"/></filter>
+      <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <marker id="arP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,2 L8,5 L0,8Z" fill="var(--primary)"/></marker>
+      <marker id="arA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,2 L8,5 L0,8Z" fill="#b45309"/></marker>
+      <marker id="arV" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,2 L8,5 L0,8Z" fill="#7c3aed"/></marker>
+    </defs>`;
+}
+
+function openJourneyMap(mode) {
+    currentMapMode = mode;
+    document.getElementById('journey-map-modal').classList.add('active');
+    document.getElementById('miqat-selector-row').style.display = (mode === 'umrah') ? 'flex' : 'none';
+    document.getElementById('hajj-map-legend').style.display   = (mode === 'hajj')   ? 'flex' : 'none';
+    renderJourneyMap();
+}
+
+function closeJourneyMap() {
+    document.getElementById('journey-map-modal').classList.remove('active');
+}
+
+function onMiqatChange(val) {
+    selectedMiqat = val;
+    renderJourneyMap();
+}
+
+function highlightMapStep(n) {
+    document.querySelectorAll('.jm-legend-item').forEach((el, i) => el.classList.toggle('jm-active', i === n-1));
+}
+
+function renderJourneyMap() {
+    const canvas = document.getElementById('journey-map-canvas');
+    const legend = document.getElementById('journey-step-legend');
+    if (!canvas || !legend) return;
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const tc   = dark ? '#e2e8f0' : '#1e293b';
+    const sc   = dark ? '#94a3b8' : '#64748b';
+    const skyA = dark ? '#0f172a' : '#dbeafe';
+    const skyB = dark ? '#1e293b' : '#f0f9ff';
+    const gnd  = dark ? '#1e2a3a' : '#fef3c7';
+
+    if (currentMapMode === 'umrah') {
+        renderUmrahMap(canvas, legend, tc, sc, skyA, skyB, gnd);
+    } else {
+        renderHajjMap(canvas, legend, tc, sc, skyA, skyB, gnd);
+    }
+}
+
+function renderUmrahMap(canvas, legend, tc, sc, skyA, skyB, gnd) {
+    const m = MIQAT_INFO[selectedMiqat];
+    const KC = {x:250, y:205};
+    const SA = {x:330, y:198};
+    const MA = {x:358, y:190};
+    const HL = {x:432, y:172};
+
+    const bezier = (ax,ay,bx,by,ox,oy) =>
+        `M${ax},${ay} Q${(ax+bx)/2+ox},${(ay+by)/2+oy} ${bx},${by}`;
+
+    const svg = `<svg viewBox="0 0 500 375" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+      ${defs(skyA, skyB)}
+      <rect width="500" height="375" fill="url(#skyG)"/>
+      <!-- Ground -->
+      <ellipse cx="250" cy="310" rx="220" ry="58" fill="${gnd}" opacity="0.55"/>
+      <path d="M30,295 Q130,278 230,292 Q340,306 470,284" fill="none" stroke="${gnd}" stroke-width="1.5" opacity="0.7"/>
+      <!-- Masjid boundary -->
+      <ellipse cx="${KC.x}" cy="${KC.y}" rx="55" ry="42" fill="rgba(212,175,55,0.07)" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <!-- Kaaba 3D -->
+      <g filter="url(#gsh)">${kaaba3D(KC.x, KC.y, 1.1)}</g>
+      <text x="${KC.x}" y="${KC.y-42}" font-family="Amiri,serif" font-size="14" text-anchor="middle" fill="${tc}" font-weight="bold">مکہ مکرمہ</text>
+      <text x="${KC.x}" y="${KC.y-27}" font-family="Amiri,serif" font-size="10" text-anchor="middle" fill="${sc}">طواف</text>
+      <!-- Tawaf rings -->
+      <circle cx="${KC.x}" cy="${KC.y}" r="40" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5" class="tawaf-ring"/>
+      <circle cx="${KC.x}" cy="${KC.y}" r="52" fill="none" stroke="#d4af37" stroke-width="0.8" stroke-dasharray="3,7" opacity="0.25" class="tawaf-ring-outer"/>
+      <!-- Safa hill -->
+      ${hill(SA.x, SA.y, 18, 11, '#a3865c')}
+      <text x="${SA.x}" y="${SA.y-14}" font-family="Amiri,serif" font-size="11" text-anchor="middle" fill="${tc}" font-weight="bold">صفا</text>
+      <!-- Marwa hill -->
+      ${hill(MA.x, MA.y, 15, 9, '#a3865c')}
+      <text x="${MA.x}" y="${MA.y-14}" font-family="Amiri,serif" font-size="11" text-anchor="middle" fill="${tc}" font-weight="bold">مروہ</text>
+      <!-- Halq -->
+      <circle cx="${HL.x}" cy="${HL.y}" r="12" fill="#059669" opacity="0.18"/>
+      <circle cx="${HL.x}" cy="${HL.y}" r="9" fill="#059669"/>
+      <text x="${HL.x}" y="${HL.y-16}" font-family="Amiri,serif" font-size="10" text-anchor="middle" fill="${tc}">حلق</text>
+      <!-- Miqat flag -->
+      <line x1="${m.x}" y1="${m.y-28}" x2="${m.x}" y2="${m.y+6}" stroke="${tc}" stroke-width="2.5"/>
+      <polygon points="${m.x},${m.y-28} ${m.x+18},${m.y-20} ${m.x},${m.y-13}" fill="var(--primary)"/>
+      <text x="${m.x}" y="${m.y+20}" font-family="Amiri,serif" font-size="11" text-anchor="middle" fill="var(--primary)" font-weight="bold">${m.name}</text>
+      <!-- Paths -->
+      <path d="${bezier(m.x,m.y,KC.x,KC.y,25,-35)}" fill="none" stroke="var(--primary)" stroke-width="3.5" stroke-dasharray="8,5" stroke-linecap="round" marker-end="url(#arP)" class="map-path" style="animation:pathReveal 1.2s ease-out 0s both;"/>
+      <path d="M${KC.x-42},${KC.y} A42,32,0,1,1,${KC.x-41},${KC.y-1}" fill="none" stroke="var(--primary)" stroke-width="3" stroke-dasharray="6,4" class="map-path" style="animation:pathReveal 1.2s ease-out 0.35s both;"/>
+      <path d="${bezier(SA.x,SA.y,MA.x,MA.y,0,-12)}" fill="none" stroke="#d97706" stroke-width="3.5" stroke-dasharray="6,5" stroke-linecap="round" marker-end="url(#arA)" class="map-path" style="animation:pathReveal 1.2s ease-out 0.65s both;"/>
+      <path d="${bezier(MA.x,MA.y,HL.x,HL.y,0,-14)}" fill="none" stroke="#059669" stroke-width="3.5" stroke-dasharray="6,5" stroke-linecap="round" class="map-path" style="animation:pathReveal 1.2s ease-out 0.95s both;"/>
+      <!-- Step dots -->
+      <g filter="url(#glow)">
+        ${dot(m.x, m.y-38, '1', 'var(--primary)', true)}
+        ${dot(KC.x+60, KC.y-10, '2', 'var(--primary)')}
+        ${dot(SA.x, SA.y+28, '3', '#d97706')}
+        ${dot(HL.x, HL.y+26, '4', '#059669')}
+      </g>
+      <text x="250" y="30" font-family="Amiri,serif" font-size="19" text-anchor="middle" font-weight="bold" fill="${tc}">عمرہ کا سفر</text>
+      <text x="250" y="50" font-family="Amiri,serif" font-size="12" text-anchor="middle" fill="${sc}">مرحلہ وار تصویری نقشہ</text>
+    </svg>`;
+
+    canvas.innerHTML = svg;
+    legend.innerHTML = `
+      <div class="jm-legend-item" onclick="highlightMapStep(1)"><div class="jm-legend-num" style="background:var(--primary)">1</div><div class="jm-legend-text"><strong>احرام و نیت</strong> — ${m.name} سے احرام باندھیں، تلبیہ پڑھتے ہوئے مکہ روانہ ہوں۔</div></div>
+      <div class="jm-legend-item" onclick="highlightMapStep(2)"><div class="jm-legend-num" style="background:var(--primary)">2</div><div class="jm-legend-text"><strong>طوافِ کعبہ</strong> — بیت اللہ کے گرد ۷ چکر، حجرِ اسود سے شروع۔</div></div>
+      <div class="jm-legend-item" onclick="highlightMapStep(3)"><div class="jm-legend-num" style="background:#d97706">3</div><div class="jm-legend-text"><strong>سعی (صفا و مروہ)</strong> — صفا اور مروہ کے درمیان ۷ چکر لگائیں۔</div></div>
+      <div class="jm-legend-item" onclick="highlightMapStep(4)"><div class="jm-legend-num" style="background:#059669">4</div><div class="jm-legend-text"><strong>حلق / تقصیر</strong> — بال کٹوا کر احرام کھولیں — عمرہ مکمل ✅</div></div>`;
+}
+
+function renderHajjMap(canvas, legend, tc, sc, skyA, skyB, gnd) {
+    const MK = {x:100, y:215};
+    const MI = {x:215, y:198};
+    const MZ = {x:305, y:218};
+    const AF = {x:395, y:202};
+    const JM = {x:190, y:240};
+
+    const svg = `<svg viewBox="0 0 500 375" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+      ${defs(skyA, skyB)}
+      <rect width="500" height="375" fill="url(#skyG)"/>
+      <!-- Ground -->
+      <ellipse cx="250" cy="305" rx="230" ry="60" fill="${gnd}" opacity="0.5"/>
+      <path d="M20,295 Q130,278 250,290 Q370,302 480,284" fill="none" stroke="${gnd}" stroke-width="1.5" opacity="0.6"/>
+      <!-- Arafat mountain -->
+      <g opacity="0.85">${mountain(AF.x, AF.y)}</g>
+      <text x="${AF.x+5}" y="${AF.y-50}" font-family="Amiri,serif" font-size="12" text-anchor="middle" fill="${tc}" font-weight="bold">عرفات</text>
+      <!-- Muzdalifa open plain -->
+      <ellipse cx="${MZ.x}" cy="${MZ.y+10}" rx="35" ry="18" fill="#a8a29e" opacity="0.25"/>
+      <text x="${MZ.x}" y="${MZ.y-10}" font-family="Amiri,serif" font-size="11" text-anchor="middle" fill="${tc}" font-weight="bold">مزدلفہ</text>
+      <!-- Mina tents -->
+      ${tent(MI.x-18, MI.y, '#f3e8d0')}${tent(MI.x, MI.y-8, '#e8d5b7')}${tent(MI.x+18, MI.y, '#f3e8d0')}
+      <text x="${MI.x}" y="${MI.y-30}" font-family="Amiri,serif" font-size="12" text-anchor="middle" fill="${tc}" font-weight="bold">منیٰ</text>
+      <!-- Kaaba (Makkah) -->
+      <g filter="url(#gsh)">${kaaba3D(MK.x, MK.y, 0.9)}</g>
+      <text x="${MK.x}" y="${MK.y-38}" font-family="Amiri,serif" font-size="12" text-anchor="middle" fill="${tc}" font-weight="bold">مکہ مکرمہ</text>
+      <!-- Tawaf ring -->
+      <circle cx="${MK.x}" cy="${MK.y}" r="34" fill="none" stroke="#d4af37" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.5" class="tawaf-ring"/>
+      <!-- Jamarat pillars -->
+      <rect x="${JM.x-18}" y="${JM.y-10}" width="8" height="18" rx="3" fill="#6b7280" opacity="0.8"/>
+      <rect x="${JM.x-4}"  y="${JM.y-13}" width="8" height="21" rx="3" fill="#4b5563" opacity="0.9"/>
+      <rect x="${JM.x+10}" y="${JM.y-10}" width="8" height="18" rx="3" fill="#6b7280" opacity="0.8"/>
+      <text x="${JM.x}" y="${JM.y+18}" font-family="Amiri,serif" font-size="10" text-anchor="middle" fill="${tc}">جمرات</text>
+      <!-- DAY PATHS -->
+      <!-- Day 8: Makkah → Mina (green) -->
+      <path d="M${MK.x+22},${MK.y} Q${(MK.x+MI.x)/2},${MK.y-30} ${MI.x-20},${MI.y}" fill="none" stroke="#0f766e" stroke-width="3.5" stroke-dasharray="8,5" stroke-linecap="round" marker-end="url(#a1)" class="map-path" style="animation:pathReveal 1.2s ease-out 0s both;"/>
+      <!-- Day 9a: Mina → Arafat (amber) -->
+      <path d="M${MI.x+20},${MI.y} Q${(MI.x+AF.x)/2},${MI.y-25} ${AF.x-15},${AF.y}" fill="none" stroke="#b45309" stroke-width="3.5" stroke-dasharray="8,5" stroke-linecap="round" marker-end="url(#a2)" class="map-path" style="animation:pathReveal 1.2s ease-out 0.3s both;"/>
+      <!-- Day 9b: Arafat → Muzdalifa (amber) -->
+      <path d="M${AF.x-18},${AF.y+5} Q${(AF.x+MZ.x)/2},${AF.y+18} ${MZ.x+18},${MZ.y}" fill="none" stroke="#b45309" stroke-width="3" stroke-linecap="round" marker-end="url(#a2)" class="map-path" style="animation:pathReveal 1.2s ease-out 0.55s both;"/>
+      <!-- Day 10a: Muzdalifa → Mina (purple) -->
+      <path d="M${MZ.x-18},${MZ.y} Q${(MZ.x+MI.x)/2},${MZ.y+15} ${MI.x+20},${MI.y+8}" fill="none" stroke="#7c3aed" stroke-width="3.5" stroke-linecap="round" marker-end="url(#a3)" class="map-path" style="animation:pathReveal 1.2s ease-out 0.8s both;"/>
+      <!-- Day 10b: Mina → Makkah (Tawaf, purple dashed) -->
+      <path d="M${MI.x-20},${MI.y+10} Q${(MI.x+MK.x)/2},${MI.y+25} ${MK.x+20},${MK.y+5}" fill="none" stroke="#7c3aed" stroke-width="3.5" stroke-dasharray="7,5" stroke-linecap="round" marker-end="url(#a3)" class="map-path" style="animation:pathReveal 1.2s ease-out 1.05s both;"/>
+      <!-- STEP DOTS -->
+      <g filter="url(#glow)">
+        ${dot(MK.x, MK.y+40, '1', '#0f766e', true)}
+        ${dot(AF.x, AF.y+44, '2', '#b45309')}
+        ${dot(MZ.x, MZ.y+42, '3', '#b45309')}
+        ${dot(JM.x+32, JM.y+8, '4', '#7c3aed')}
+        ${dot(MK.x+40, MK.y+38, '5', '#7c3aed')}
+      </g>
+      <!-- Markers for arrows -->
+      <defs>
+        <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,2 L8,5 L0,8Z" fill="#0f766e"/></marker>
+        <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,2 L8,5 L0,8Z" fill="#b45309"/></marker>
+        <marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,2 L8,5 L0,8Z" fill="#7c3aed"/></marker>
+      </defs>
+      <text x="250" y="30" font-family="Amiri,serif" font-size="19" text-anchor="middle" font-weight="bold" fill="${tc}">حج کا سفر</text>
+      <text x="250" y="50" font-family="Amiri,serif" font-size="12" text-anchor="middle" fill="${sc}">مرحلہ وار تصویری نقشہ</text>
+    </svg>`;
+
+    canvas.innerHTML = svg;
+    legend.innerHTML = `
+      <div class="jm-legend-item" onclick="highlightMapStep(1)"><div class="jm-legend-num" style="background:#0f766e">1</div><div class="jm-legend-text"><strong>۸ ذی الحجہ — منیٰ</strong> مکہ سے منیٰ روانگی، پانچ نمازیں ادا کریں۔</div></div>
+      <div class="jm-legend-item" onclick="highlightMapStep(2)"><div class="jm-legend-num" style="background:#b45309">2</div><div class="jm-legend-text"><strong>۹ ذی الحجہ — عرفات</strong> وقوفِ عرفہ، حج کا سب سے بڑا رکن۔</div></div>
+      <div class="jm-legend-item" onclick="highlightMapStep(3)"><div class="jm-legend-num" style="background:#b45309">3</div><div class="jm-legend-text"><strong>۹ ذی الحجہ رات — مزدلفہ</strong> مغرب بعد مزدلفہ، رات گزاریں، کنکریاں جمع کریں۔</div></div>
+      <div class="jm-legend-item" onclick="highlightMapStep(4)"><div class="jm-legend-num" style="background:#7c3aed">4</div><div class="jm-legend-text"><strong>۱۰ ذی الحجہ — جمرات</strong> رمی، قربانی، حلق — احرام کھولیں۔</div></div>
+      <div class="jm-legend-item" onclick="highlightMapStep(5)"><div class="jm-legend-num" style="background:#7c3aed">5</div><div class="jm-legend-text"><strong>طوافِ زیارت</strong> مکہ جا کر طوافِ زیارت و سعی، واپس منیٰ ایام تشریق۔ ✅</div></div>`;
+}
+
 
 const MIQAT_COORDS = {
     dhulhulaifa: { x: 50, y: 50, name: 'ذوالحلیفہ' },
@@ -1442,16 +1673,31 @@ tasbeehSelect.addEventListener('change', () => {
 });
 
 // --- Prayer Times & Dates ---
+let currentCalHijriMonth = null;
+let currentCalHijriYear = null;
+let actualTodayHijri = null;
+
 async function fetchPrayerTimes() {
     try {
-        const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Riyadh&country=Saudi Arabia&method=2');
+        const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Riyadh&country=Saudi%20Arabia&method=2');
         const data = await res.json();
         const timings = data.data.timings;
         const date = data.data.date;
 
+        // Store current Hijri state
+        actualTodayHijri = date.hijri;
+        if (!currentCalHijriMonth) {
+            currentCalHijriMonth = parseInt(date.hijri.month.number);
+            currentCalHijriYear = parseInt(date.hijri.year);
+        }
+
         // Update dates
         document.getElementById('gregorian-date').innerText = date.gregorian.date;
         document.getElementById('hijri-date').innerText = `${date.hijri.day} ${date.hijri.month.en} ${date.hijri.year}`;
+        
+        // Update Calendar Modal Header Dates
+        document.getElementById('cal-gregorian-date').innerText = date.gregorian.date;
+        document.getElementById('cal-hijri-date').innerText = `${date.hijri.day} ${date.hijri.month.en} ${date.hijri.year}`;
 
         // Update Prayer List
         const prayerList = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
@@ -1737,4 +1983,163 @@ function calculateQiblaBearing(lat1, lon1) {
     return (qibla + 360) % 360;
 }
 
+// =====================================================
+// ISLAMIC CALENDAR LOGIC — Enhanced
+// =====================================================
+
+// Moon phase by hijri day (rough approximation)
+function moonPhaseIcon(hijriDay) {
+    const d = parseInt(hijriDay);
+    if (d <= 1)  return '🌑';
+    if (d <= 6)  return '🌒';
+    if (d <= 12) return '🌓';
+    if (d <= 14) return '🌕';
+    if (d <= 20) return '🌖';
+    if (d <= 25) return '🌗';
+    if (d <= 28) return '🌘';
+    return '🌑';
+}
+
+// Known Islamic holy events per Hijri month (month number → [{day, label}])
+const ISLAMIC_EVENTS = {
+    1:  [{ d:1,  l:'رأس السنة' }, { d:10, l:'عاشوراء' }],
+    3:  [{ d:12, l:'میلاد النبی ﷺ' }],
+    7:  [{ d:27, l:'معراج النبی ﷺ' }],
+    8:  [{ d:15, l:'شب برات' }],
+    9:  [{ d:1,  l:'رمضان' }, { d:21, l:'لیلۃ القدر' }, { d:23, l:'لیلۃ القدر' }, { d:25, l:'لیلۃ القدر' }, { d:27, l:'لیلۃ القدر' }],
+    10: [{ d:1,  l:'عید الفطر' }],
+    12: [{ d:8,  l:'یوم عرفہ' }, { d:10, l:'عید الاضحی' }, { d:11, l:'ایام تشریق' }, { d:12, l:'ایام تشریق' }, { d:13, l:'ایام تشریق' }]
+};
+
+let calSlideDir = 'right';
+
+function openIslamicCalendar() {
+    document.getElementById('calendar-modal').classList.add('active');
+    if (actualTodayHijri) {
+        fetchAndRenderIslamicCalendar(currentCalHijriMonth, currentCalHijriYear);
+    }
+}
+
+function closeIslamicCalendar() {
+    document.getElementById('calendar-modal').classList.remove('active');
+}
+
+function changeHijriMonth(offset) {
+    calSlideDir = offset > 0 ? 'right' : 'left';
+    currentCalHijriMonth += offset;
+    if (currentCalHijriMonth > 12) { currentCalHijriMonth = 1;  currentCalHijriYear++; }
+    if (currentCalHijriMonth < 1)  { currentCalHijriMonth = 12; currentCalHijriYear--; }
+    fetchAndRenderIslamicCalendar(currentCalHijriMonth, currentCalHijriYear);
+}
+
+async function fetchAndRenderIslamicCalendar(month, year) {
+    const loading   = document.getElementById('cal-loading');
+    const container = document.getElementById('cal-days-container');
+    const title     = document.getElementById('calendar-month-title');
+    const ribbon    = document.getElementById('cal-events-ribbon');
+
+    container.innerHTML = '';
+    if (ribbon) ribbon.innerHTML = '';
+    loading.style.display = 'flex';
+    title.innerHTML = '<span>...</span>';
+
+    try {
+        const res  = await fetch(`https://api.aladhan.com/v1/hijriCalendarByCity?city=Riyadh&country=Saudi%20Arabia&method=2&month=${month}&year=${year}`);
+        if (!res.ok) throw new Error('API error');
+        const data = await res.json();
+        const days = data.data;
+
+        if (days && days.length > 0) {
+            const monthName = days[0].date.hijri.month.en;
+            const moonIcon  = moonPhaseIcon(15); // mid-month moon
+
+            // Update title with moon icon
+            title.innerHTML = `<span class="cal-moon-icon">${moonIcon}</span><span>${monthName} ${year} AH</span>`;
+
+            // Collect events for this month from our local data
+            const monthEvents = ISLAMIC_EVENTS[month] || [];
+
+            // Also collect holidays from API response
+            const apiHolidays = new Map();
+            days.forEach(d => {
+                const hols = d.date.hijri.holidays || [];
+                if (hols.length) {
+                    apiHolidays.set(parseInt(d.date.hijri.day), hols);
+                }
+            });
+
+            // Populate events ribbon (unique events for this month)
+            if (ribbon) {
+                const ribbonEvents = [...monthEvents.map(e => e.l),
+                    ...[...apiHolidays.values()].flat().slice(0, 3)];
+                const unique = [...new Set(ribbonEvents)].slice(0, 5);
+                if (unique.length) {
+                    ribbon.innerHTML = unique.map(e => `<span class="cal-event-chip">✦ ${e}</span>`).join('');
+                }
+            }
+
+            // Weekday offset
+            const weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            const startIdx = weekdays.indexOf(days[0].date.gregorian.weekday.en);
+
+            // Empty slots
+            for (let i = 0; i < startIdx; i++) {
+                const el = document.createElement('div');
+                el.className = 'cal-day empty';
+                container.appendChild(el);
+            }
+
+            // Day cells
+            days.forEach(day => {
+                const hijriDay  = parseInt(day.date.hijri.day);
+                const gregDay   = parseInt(day.date.gregorian.day);
+                const weekdayEn = day.date.gregorian.weekday.en;
+                const dayHols   = apiHolidays.get(hijriDay) || [];
+                const localEvt  = monthEvents.find(e => e.d === hijriDay);
+                const isFriday  = weekdayEn === 'Friday';
+                const isToday   = actualTodayHijri &&
+                    day.date.hijri.day === actualTodayHijri.day &&
+                    day.date.hijri.month.number == actualTodayHijri.month.number &&
+                    day.date.hijri.year == actualTodayHijri.year;
+                const isHoly    = dayHols.length > 0 || !!localEvt;
+
+                const el = document.createElement('div');
+                el.className = `cal-day${isToday ? ' today' : ''}${isHoly && !isToday ? ' holy-day' : ''}${isFriday && !isToday ? ' friday' : ''}`;
+
+                // Hijri number
+                const hn = document.createElement('div');
+                hn.innerText = hijriDay;
+
+                // Gregorian tiny
+                const gn = document.createElement('div');
+                gn.className = 'cal-gregorian-tiny';
+                gn.innerText = gregDay;
+
+                el.appendChild(hn);
+                el.appendChild(gn);
+
+                // Event badge (show the first event name, very short)
+                const evtLabel = localEvt?.l || (dayHols[0] ? dayHols[0].substring(0,8) : null);
+                if (evtLabel && !isToday) {
+                    const badge = document.createElement('div');
+                    badge.className = 'cal-event-badge';
+                    badge.innerText = evtLabel;
+                    el.appendChild(badge);
+                }
+
+                container.appendChild(el);
+            });
+
+            // Slide animation
+            container.classList.remove('cal-slide-right', 'cal-slide-left');
+            void container.offsetWidth; // reflow
+            container.classList.add(calSlideDir === 'right' ? 'cal-slide-right' : 'cal-slide-left');
+        }
+    } catch (err) {
+        console.error('Calendar fetch failed', err);
+        title.innerHTML = '<span>Failed to load</span>';
+    } finally {
+        loading.style.display = 'none';
+    }
+}
 
